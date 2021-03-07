@@ -1,1 +1,0 @@
-IA - Practica 1
