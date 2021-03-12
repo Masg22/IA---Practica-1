@@ -54,7 +54,43 @@ public class Estat {
 		else sensor.free = true;
 	}
 	public void setOccupacyC (ConnexCentro centro) {
-		if(centro.in.size()>=3) centro.free = false;
+		if(centro.in.size()>=3) centro.free = false; // no tendria que ser 25?
 		else centro.free = true;
 	}
+	
+	
+	// operadors
+	
+	//pre el Sensor "sensor" y el sensor i/o centro "newConnex" tienen connexiones libres
+	
+	private void moveConnexS(Integer sensor, Integer newConnex, Boolean output) {
+		//queremos solo cambiar la de salida?? o tambien las de entrada ?? 
+		// comprovar que el output no esta vacio y entonces modificarlo ??
+		
+		if (output) {
+			connexS.get(sensor).out = newConnex;
+			if (newConnex < 0) {
+				connexC.get(-newConnex).in.add(sensor);
+			}
+			else {
+				connexS.get(newConnex).in.add(sensor);
+			}
+		}
+		else {
+			// ¿?
+		}
+	}
+	
+	// necesitamos un moveConnexC ??
+	
+	//pre value es 1 2 o 5
+	private void changeCapacityS(Integer sensor, Integer value) {
+		sensores.get(sensor).setCapacidad(value);
+	}
+	
+	private void changePosS(Integer sensor, Integer x, Integer y) {
+		sensores.get(sensor).setCoordX(x);
+		sensores.get(sensor).setCoordY(y);
+	}
+	
 }
