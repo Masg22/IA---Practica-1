@@ -2,95 +2,284 @@ package IA.Red;
 
 import java.util.ArrayList;
 
-class ConnexSensor{
-	ArrayList<Integer> in = new ArrayList<Integer>();
-	Integer out = -1;
-	Boolean free = false; 
-}
-class ConnexCentro{
-	ArrayList<Integer> in = new ArrayList<Integer>();
-	Boolean free = false;
-}
-
 public class Estat {
-	
-	static Sensores sensores;
-	static CentrosDatos centros;
-	
+
+	final static int MAXINPUTSENSOR = 3;
+	final static int MAXINPUTCENTER = 25;
+
+	private static Sensores sensores;
+	private static CentrosDatos centros;
+
+	// Llistat de Connexions dels sensors
 	private ArrayList<ConnexSensor> connexS;
+	
+	// Llistat de Connexions dels centres
 	private ArrayList<ConnexCentro> connexC;
 	
+	// Vector de 100 posicions on definim el Grid (solucio) actual
+	private int networkGrid[];
+
 	private double coste;
-	
-	//*************Getters*************
-	public double getCoste() {
-		return coste;
+
+	// Class definition ConnexSensor
+	public class ConnexSensor {
+		private int id;
+		private ArrayList<Integer> connectionIn;
+		private int connectionOut;
+		private Boolean isFree;
+
+		public ConnexSensor() {
+			id = -1;
+			connectionIn = new ArrayList<Integer>();
+			connectionOut = -1;
+			isFree = true;
+		}
+
+		public ConnexSensor(int id, ArrayList<Integer> connectionIn, int connectionOut) {
+			this.id = id;
+			this.connectionIn = connectionIn;
+			this.connectionOut = connectionOut;
+			if(connectionIn.size() >= MAXINPUTSENSOR) {
+				this.isFree = false;
+			} else {
+				this.isFree = true;
+			}
+		}
+
+		public ConnexSensor(ConnexSensor cs) {
+			id = cs.id;
+			connectionIn = cs.connectionIn;
+			connectionOut = cs.connectionOut;
+			isFree = cs.isFree;
+		}
+		
+		public int setConnection(int sensorId) {
+			connectionIn.add(sensorId);
+			if(connectionIn.size() >= MAXINPUTSENSOR) {
+				isFree = false;
+			}
+			return id;
+		}
+
+		// GETTERS
+		public int getId() {
+			return id;
+		}
+		
+		public ArrayList<Integer> getConnectionIn() {
+			return connectionIn;
+		}
+
+		public int getConnectionOut() {
+			return connectionOut;
+		}
+
+		public Boolean getIsFree() {
+			return isFree;
+		}
+
+		// SETTERS
+		public void setId(int id) {
+			this.id = id;
+		}
+		
+		public void setConnectionIn(ArrayList<Integer> in) {
+			this.connectionIn = in;
+		}
+
+		public void setConnectionOut(int out) {
+			this.connectionOut = out;
+		}
+
+		public void setIsFree(Boolean free) {
+			this.isFree = free;
+		}
 	}
-	//*************Constructoras*************
+
+	// Class definition ConnexSensor
+	public class ConnexCentro {
+		private int id;
+		private ArrayList<Integer> connectionIn;
+		private Boolean isFree;
+
+		public ConnexCentro() {
+			connectionIn = new ArrayList<Integer>();
+			isFree = true;
+		}
+
+		public ConnexCentro(int id, ArrayList<Integer> connectionIn) {
+			this.id = id;
+			this.connectionIn = connectionIn;
+			if(connectionIn.size() >= MAXINPUTCENTER) {
+				this.isFree = false;
+			} else {
+				this.isFree = true;
+			}
+		}
+
+		public ConnexCentro(ConnexCentro cc) {
+			id = cc.id;
+			connectionIn = cc.connectionIn;
+			isFree = cc.isFree;
+		}
+		
+		public int setConnection(int sensorId) {
+			connectionIn.add(sensorId);
+			if(connectionIn.size() >= MAXINPUTCENTER) {
+				isFree = false;
+			}
+			return id;
+		}
+
+		// GETTERS
+		public int getId() {
+			return id;
+		}
+		
+		public ArrayList<Integer> getConnectionIn() {
+			return connectionIn;
+		}
+
+		public Boolean getIsFree() {
+			return isFree;
+		}
+
+		// SETTERS
+		public void setId(int id) {
+			this.id = id;
+		}
+		
+		public void setConnectionIn(ArrayList<Integer> in) {
+			this.connectionIn = in;
+		}
+
+		public void setIsFree(Boolean free) {
+			this.isFree = free;
+		}
+	}
+
+	// *************Constructoras*************
 	public Estat(int nsens, int sens_seed, int ncent, int cent_seed) {
-		
+
 		sensores = new Sensores(nsens, sens_seed);
+
 		centros = new CentrosDatos(ncent, cent_seed);
-		
+
 		connexS = new ArrayList<ConnexSensor>(nsens);
-		
+
 		connexC = new ArrayList<ConnexCentro>(ncent);
 		
+		// Call the init first solution function
+		networkGrid = new int[100];
+
 		coste = 0.0;
 	}
-	
+
 	public Estat(Estat estat) {
-		sensores = estat.sensores;
-		centros = estat.centros;
-		connexS = new ArrayList<ConnexSensor>(estat.connexS);
-		connexC = new ArrayList<ConnexCentro>(estat.connexC);
-		coste = estat.coste;
+		sensores = estat.getSensores();
+		centros = estat.getCentros();
+		connexS = estat.getConnexS();
+		connexC = estat.getConnexC();
+		networkGrid = estat.getNetworkGrid();
+		coste = estat.getCoste();
 	}
-	
-	//*************Occupacy para sensores y centros*************
-	//Controlar cada vez que añadimos una connexion a un sensor o centro. 
-	public void setOccupacyS (ConnexSensor sensor) {
-		if(sensor.in.size()>=3) sensor.free = false;
-		else sensor.free = true;
+
+	// *************Occupacy para sensores y centros*************
+	// Controlar cada vez que añadimos una connexion a un sensor o centro.
+	public void setOccupacyS(ConnexSensor sensor) {
+		if (sensor.getConnectionIn().size() >= MAXINPUTSENSOR)
+			sensor.setIsFree(false);
+		else
+			sensor.setIsFree(true);
 	}
-	public void setOccupacyC (ConnexCentro centro) {
-		if(centro.in.size()>=3) centro.free = false; // no tendria que ser 25?
-		else centro.free = true;
+
+	public void setOccupacyC(ConnexCentro centro) {
+		if (centro.getConnectionIn().size() >= MAXINPUTCENTER)
+			centro.setIsFree(false);
+		else
+			centro.setIsFree(true);
 	}
-	
-	
+
 	// operadors
-	
-	//pre el Sensor "sensor" y el sensor i/o centro "newConnex" tienen connexiones libres
-	
+
+	// pre el Sensor "sensor" y el sensor i/o centro "newConnex" tienen connexiones
+	// libres
+
 	private void moveConnexS(Integer sensor, Integer newConnex, Boolean output) {
-		//queremos solo cambiar la de salida?? o tambien las de entrada ?? 
+		// queremos solo cambiar la de salida?? o tambien las de entrada ??
 		// comprovar que el output no esta vacio y entonces modificarlo ??
-		
+
 		if (output) {
 			connexS.get(sensor).out = newConnex;
 			if (newConnex < 0) {
 				connexC.get(-newConnex).in.add(sensor);
-			}
-			else {
+			} else {
 				connexS.get(newConnex).in.add(sensor);
 			}
-		}
-		else {
+		} else {
 			// ¿?
 		}
 	}
-	
+
 	// necesitamos un moveConnexC ??
-	
-	//pre value es 1 2 o 5
-	private void changeCapacityS(Integer sensor, Integer value) {
-		sensores.get(sensor).setCapacidad(value);
+
+	// pre value es 1 2 o 5
+	private void changeCapacityS(Integer sensorId, Integer value) {
+		sensores.get(sensorId).setCapacidad(value);
 	}
-	
-	private void changePosS(Integer sensor, Integer x, Integer y) {
-		sensores.get(sensor).setCoordX(x);
-		sensores.get(sensor).setCoordY(y);
+
+	private void changePosS(Integer sensorId, Integer x, Integer y) {
+		sensores.get(sensorId).setCoordX(x);
+		sensores.get(sensorId).setCoordY(y);
 	}
-	
+
+	// * Getters and Setters *
+
+	public Sensores getSensores() {
+		return sensores;
+	}
+
+	public void setSensores(Sensores sensores) {
+		Estat.sensores = sensores;
+	}
+
+	public CentrosDatos getCentros() {
+		return centros;
+	}
+
+	public void setCentros(CentrosDatos centros) {
+		Estat.centros = centros;
+	}
+
+	public ArrayList<ConnexSensor> getConnexS() {
+		return connexS;
+	}
+
+	public void setConnexS(ArrayList<ConnexSensor> connexS) {
+		this.connexS = connexS;
+	}
+
+	public ArrayList<ConnexCentro> getConnexC() {
+		return connexC;
+	}
+
+	public void setConnexC(ArrayList<ConnexCentro> connexC) {
+		this.connexC = connexC;
+	}
+
+	public double getCoste() {
+		return coste;
+	}
+
+	public void setCoste(double coste) {
+		this.coste = coste;
+	}
+
+	public int[] getNetworkGrid() {
+		return networkGrid;
+	}
+
+	public void setNetworkGrid(int networkGrid[]) {
+		this.networkGrid = networkGrid;
+	}
 }
