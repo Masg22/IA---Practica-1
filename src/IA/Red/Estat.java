@@ -22,6 +22,7 @@ public class Estat {
 	private double coste;
 
 	// Class definition ConnexSensor
+	// conexiones a sensores de 0 a S y conexiones a centros de -1 a -C
 	public class ConnexSensor {
 		private int id;
 		private ArrayList<Integer> connectionIn;
@@ -59,6 +60,13 @@ public class Estat {
 				isFree = false;
 			}
 			return id;
+		}
+		
+		public void deleteConnexion(int sensorId) {
+			connectionIn.remove(connectionIn.indexOf(sensorId));
+			if(connectionIn.size() < MAXINPUTCENTER) {
+				isFree = true;
+			}
 		}
 
 		// GETTERS
@@ -130,6 +138,13 @@ public class Estat {
 			}
 			return id;
 		}
+		
+		public void deleteConnexion(int sensorId) {
+			connectionIn.remove(connectionIn.indexOf(sensorId));
+			if(connectionIn.size() >= MAXINPUTCENTER) {
+				isFree = false;
+			}
+		}
 
 		// GETTERS
 		public int getId() {
@@ -167,7 +182,7 @@ public class Estat {
 
 		connexS = new ArrayList<ConnexSensor>(nsens);
 
-		connexC = new ArrayList<ConnexCentro>(ncent);
+		connexC = new ArrayList<ConnexCentro>(ncent + 1);
 		
 		// Call the init first solution function
 		networkGrid = new int[100];
@@ -205,30 +220,32 @@ public class Estat {
 	// pre el Sensor "sensor" y el sensor i/o centro "newConnex" tienen connexiones
 	// libres
 
-	private void moveConnexS(Integer sensor, Integer newConnex, Boolean output) {
-		// queremos solo cambiar la de salida?? o tambien las de entrada ??
-		// comprovar que el output no esta vacio y entonces modificarlo ??
-
-		if (output) {
-			connexS.get(sensor).out = newConnex;
-			if (newConnex < 0) {
-				connexC.get(-newConnex).in.add(sensor);
-			} else {
-				connexS.get(newConnex).in.add(sensor);
-			}
-		} else {
-			// ¿?
+	public void moveConnexS(Integer sensor, Integer newConnex) {
+		int oldConnex = connexS.get(sensor).getConnectionOut();
+		if (oldConnex < 0) { // CENTRO
+			connexC.get(- oldConnex).deleteConnexion(sensor);
 		}
+		else { // SENSOR
+			connexS.get(oldConnex).deleteConnexion(sensor);
+		}
+		
+		if (newConnex < 0) { // CENTRO
+			connexS.get(sensor).setConnection(newConnex);
+			connexC.get(- newConnex).setConnection(sensor);
+		} 
+		else { // SENSOR
+			connexS.get(sensor).setConnectionOut(newConnex);
+			connexS.get(newConnex).setConnection(sensor);
+		}
+		
 	}
 
-	// necesitamos un moveConnexC ??
-
 	// pre value es 1 2 o 5
-	private void changeCapacityS(Integer sensorId, Integer value) {
+	public void changeCapacityS(Integer sensorId, Integer value) {
 		sensores.get(sensorId).setCapacidad(value);
 	}
 
-	private void changePosS(Integer sensorId, Integer x, Integer y) {
+	public void changePosS(Integer sensorId, Integer x, Integer y) {
 		sensores.get(sensorId).setCoordX(x);
 		sensores.get(sensorId).setCoordY(y);
 	}
