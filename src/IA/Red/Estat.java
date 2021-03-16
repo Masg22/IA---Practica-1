@@ -1,6 +1,9 @@
 package IA.Red;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Estat {
 
@@ -19,22 +22,20 @@ public class Estat {
 	private double coste;
 
 	// Class definition ConnexSensor
-	// conexiones a sensores de 0 a S y conexiones a centros de -1 a -C
+	// conexiones a sensores de 1 a S y conexiones a centros de -1 a -C
+	// La connexio a connectionOut 0 simbolitza un sensor que no te conexio de sortida
 	public class ConnexSensor {
-		private int id;
 		private ArrayList<Integer> connectionIn;
 		private int connectionOut;
 		private Boolean isFree;
 
 		public ConnexSensor() {
-			id = -1;
-			connectionIn = new ArrayList<Integer>();
-			connectionOut = -1;
+			connectionIn = new ArrayList<Integer>(MAXINPUTSENSOR);
+			connectionOut = 0;
 			isFree = true;
 		}
 
-		public ConnexSensor(int id, ArrayList<Integer> connectionIn, int connectionOut) {
-			this.id = id;
+		public ConnexSensor(ArrayList<Integer> connectionIn, int connectionOut) {
 			this.connectionIn = connectionIn;
 			this.connectionOut = connectionOut;
 			if(connectionIn.size() >= MAXINPUTSENSOR) {
@@ -45,32 +46,24 @@ public class Estat {
 		}
 
 		public ConnexSensor(ConnexSensor cs) {
-			id = cs.id;
-			connectionIn = cs.connectionIn;
+			connectionIn = new ArrayList<Integer>(cs.connectionIn);
 			connectionOut = cs.connectionOut;
 			isFree = cs.isFree;
 		}
 		
-		public int setConnection(int sensorId) {
+		public void addConnectionIn(int sensorId) {
 			connectionIn.add(sensorId);
 			if(connectionIn.size() >= MAXINPUTSENSOR) {
 				isFree = false;
 			}
-			return id;
 		}
 		
 		public void deleteConnexion(int sensorId) {
 			connectionIn.remove(connectionIn.indexOf(sensorId));
-			if(connectionIn.size() < MAXINPUTCENTER) {
-				isFree = true;
-			}
+			isFree = true;
 		}
 
 		// GETTERS
-		public int getId() {
-			return id;
-		}
-		
 		public ArrayList<Integer> getConnectionIn() {
 			return connectionIn;
 		}
@@ -84,10 +77,6 @@ public class Estat {
 		}
 
 		// SETTERS
-		public void setId(int id) {
-			this.id = id;
-		}
-		
 		public void setConnectionIn(ArrayList<Integer> in) {
 			this.connectionIn = in;
 		}
@@ -103,17 +92,15 @@ public class Estat {
 
 	// Class definition ConnexSensor
 	public class ConnexCentro {
-		private int id;
 		private ArrayList<Integer> connectionIn;
 		private Boolean isFree;
 
 		public ConnexCentro() {
-			connectionIn = new ArrayList<Integer>();
+			connectionIn = new ArrayList<Integer>(MAXINPUTCENTER);
 			isFree = true;
 		}
 
-		public ConnexCentro(int id, ArrayList<Integer> connectionIn) {
-			this.id = id;
+		public ConnexCentro(ArrayList<Integer> connectionIn) {
 			this.connectionIn = connectionIn;
 			if(connectionIn.size() >= MAXINPUTCENTER) {
 				this.isFree = false;
@@ -123,31 +110,23 @@ public class Estat {
 		}
 
 		public ConnexCentro(ConnexCentro cc) {
-			id = cc.id;
-			connectionIn = cc.connectionIn;
+			connectionIn = new ArrayList<Integer>(cc.connectionIn);
 			isFree = cc.isFree;
 		}
 		
-		public int setConnection(int sensorId) {
+		public void addConnectionIn(int sensorId) {
 			connectionIn.add(sensorId);
 			if(connectionIn.size() >= MAXINPUTCENTER) {
 				isFree = false;
 			}
-			return id;
 		}
 		
 		public void deleteConnexion(int sensorId) {
 			connectionIn.remove(connectionIn.indexOf(sensorId));
-			if(connectionIn.size() >= MAXINPUTCENTER) {
-				isFree = false;
-			}
+			isFree = true;
 		}
 
 		// GETTERS
-		public int getId() {
-			return id;
-		}
-		
 		public ArrayList<Integer> getConnectionIn() {
 			return connectionIn;
 		}
@@ -157,10 +136,6 @@ public class Estat {
 		}
 
 		// SETTERS
-		public void setId(int id) {
-			this.id = id;
-		}
-		
 		public void setConnectionIn(ArrayList<Integer> in) {
 			this.connectionIn = in;
 		}
@@ -170,19 +145,31 @@ public class Estat {
 		}
 	}
 
-	// *************Constructoras*************
+	
+	// * Constructors *
+	
 	public Estat(int nsens, int sensSeed, int ncent, int centSeed) {
 
 		sensores = new Sensores(nsens, sensSeed);
 
 		centros = new CentrosDatos(ncent, centSeed);
+		
+		// We add +1 to the number of sensors because we will use positive numbers for the Sensor ID, and 
+		// negative IDs for the center. In that case, we cannot use the 0 position (there is not a -0 +0 id)
+		
+		nsens++;
 
 		connexSList = new ArrayList<ConnexSensor>(nsens);
 		for (int i = 0; i < nsens; i++) {
 			connexSList.add(new ConnexSensor());
         }
 
-		connexCList = new ArrayList<ConnexCentro>(ncent + 1);
+		// We add +1 to the number of centers because we will use positive numbers for the Sensor ID, and 
+		// negative IDs for the center. In that case, we cannot use the 0 position (there is not a -0 +0 id)
+		
+		ncent++;
+		
+		connexCList = new ArrayList<ConnexCentro>(ncent);
 		for (int i = 0; i < ncent; i++) {
 			connexCList.add(new ConnexCentro());
         }
@@ -193,34 +180,92 @@ public class Estat {
 	public Estat(Estat estat) {
 		sensores = estat.getSensores();
 		centros = estat.getCentros();
-		connexSList = estat.getConnexSList();
-		connexCList = estat.getConnexCList();
+		// We have to create a shadow copy of the ArrayList, not just the 
+		// reference like  "connexSList = estat.getConnexSList();"
+		connexSList = new ArrayList<ConnexSensor>(estat.getConnexSList());
+		connexCList = new ArrayList<ConnexCentro>(estat.getConnexCList());
 		coste = estat.getCoste();
 	}
 
-	// operadors
+	
+	// * Functions *
+	
+	public void solucioInicial1() {
+		Collections.sort(sensores, new Comparator<Sensor>() {
+			@Override
+			public int compare(Sensor s1, Sensor s2) {
+				return ((Double) s2.getCapacidad()).compareTo((Double) s1.getCapacidad());
+			}
+		});
+		
+		// It is useful ?
+		
+	}
+	
+	public void solucioInicial2() {
+		Collections.sort(sensores, new Comparator<Sensor>() {
+			@Override
+			public int compare(Sensor s1, Sensor s2) {
+				// We sort the sensors with the distance from the 0,0 coordinate
+				Integer distS1 = (s1.getCoordX()*s1.getCoordX()) + (s1.getCoordY()*s1.getCoordY());
+				Integer distS2 = (s2.getCoordX()*s2.getCoordX()) + (s2.getCoordY()*s2.getCoordY());
+				
+				return (distS2.compareTo(distS1));
+			}
+		});
+		
+		Collections.sort(centros, new Comparator<Centro>() {
+			@Override
+			public int compare(Centro c1, Centro c2) {
+				// We sort the centers with the distance from the 0,0 coordinate
+				Integer distC1 = (c1.getCoordX()*c1.getCoordX()) + (c1.getCoordY()*c1.getCoordY());
+				Integer distC2 = (c2.getCoordX()*c2.getCoordX()) + (c2.getCoordY()*c2.getCoordY());
+				
+				return (distC2.compareTo(distC1));
+			}
+		});
+		
+		Boolean[] sensorsConnected = new Boolean[sensores.size()];
+		Arrays.fill(sensorsConnected, Boolean.FALSE);
+		
+		
+		for(int j = 0, jc = 1; j < centros.size(); j++, jc++) {
+			for(int i = 0, is = 1; i < sensores.size(); i++, is++) {
+				if(!sensorsConnected[i]) {
+					if(connexCList.get(jc).isFree) {
+						connexSList.get(is).setConnectionOut(-jc);
+						connexCList.get(jc).addConnectionIn(is);
+						sensorsConnected[i] = true;
+					}
+				}
+			}
+		}
+	}
+	
+	
+	// * Operators *
 
 	// pre el Sensor "sensor" y el sensor i/o centro "newConnex" tienen connexiones
 	// libres
 
-	public void moveConnexS(Integer sensor, Integer newConnex) {
-		int oldConnex = connexS.get(sensor).getConnectionOut();
-		if (oldConnex < 0) { // CENTRO
-			connexC.get(- oldConnex).deleteConnexion(sensor);
-		}
-		else { // SENSOR
-			connexS.get(oldConnex).deleteConnexion(sensor);
+	public void createConnexionS(Integer sensorID, Integer newConnexID) {
+		int oldConnexID = connexSList.get(sensorID).getConnectionOut();
+		
+		if (oldConnexID == 0) {
+			// Si sensorID no estaba conectat a res, no eliminem cap connexio
+		} else if (oldConnexID < 0) {									// Si sensorID estaba conectat a un Centre
+			connexCList.get(-oldConnexID).deleteConnexion(sensorID);
+		} else { 														// Si sensorID estaba conectat a un Sensor
+			connexSList.get(oldConnexID).deleteConnexion(sensorID);
 		}
 		
-		if (newConnex < 0) { // CENTRO
-			connexS.get(sensor).setConnection(newConnex);
-			connexC.get(- newConnex).setConnection(sensor);
-		} 
-		else { // SENSOR
-			connexS.get(sensor).setConnectionOut(newConnex);
-			connexS.get(newConnex).setConnection(sensor);
+		if (newConnexID < 0) { 											// Si la nova Conexio es a un Centre
+			connexSList.get(sensorID).setConnectionOut(newConnexID);
+			connexCList.get(-newConnexID).addConnectionIn(sensorID);
+		} else {														// Si la nova Conexio es a un Sensor
+			connexSList.get(sensorID).setConnectionOut(newConnexID);
+			connexSList.get(newConnexID).addConnectionIn(sensorID);
 		}
-		
 	}
 
 	// pre value es 1 2 o 5
@@ -233,6 +278,7 @@ public class Estat {
 		sensores.get(sensorId).setCoordY(y);
 	}
 
+	
 	// * Getters and Setters *
 
 	public Sensores getSensores() {
