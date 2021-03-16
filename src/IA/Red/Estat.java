@@ -7,17 +7,14 @@ public class Estat {
 	final static int MAXINPUTSENSOR = 3;
 	final static int MAXINPUTCENTER = 25;
 
-	private static Sensores sensores;
-	private static CentrosDatos centros;
+	static Sensores sensores;
+	static CentrosDatos centros;
 
 	// Llistat de Connexions dels sensors
-	private ArrayList<ConnexSensor> connexS;
+	private ArrayList<ConnexSensor> connexSList;
 	
 	// Llistat de Connexions dels centres
-	private ArrayList<ConnexCentro> connexC;
-	
-	// Vector de 100 posicions on definim el Grid (solucio) actual
-	private int networkGrid[];
+	private ArrayList<ConnexCentro> connexCList;
 
 	private double coste;
 
@@ -174,45 +171,31 @@ public class Estat {
 	}
 
 	// *************Constructoras*************
-	public Estat(int nsens, int sens_seed, int ncent, int cent_seed) {
+	public Estat(int nsens, int sensSeed, int ncent, int centSeed) {
 
-		sensores = new Sensores(nsens, sens_seed);
+		sensores = new Sensores(nsens, sensSeed);
 
-		centros = new CentrosDatos(ncent, cent_seed);
+		centros = new CentrosDatos(ncent, centSeed);
 
-		connexS = new ArrayList<ConnexSensor>(nsens);
+		connexSList = new ArrayList<ConnexSensor>(nsens);
+		for (int i = 0; i < nsens; i++) {
+			connexSList.add(new ConnexSensor());
+        }
 
-		connexC = new ArrayList<ConnexCentro>(ncent + 1);
+		connexCList = new ArrayList<ConnexCentro>(ncent + 1);
+		for (int i = 0; i < ncent; i++) {
+			connexCList.add(new ConnexCentro());
+        }
 		
-		// Call the init first solution function
-		networkGrid = new int[100];
-
 		coste = 0.0;
 	}
 
 	public Estat(Estat estat) {
 		sensores = estat.getSensores();
 		centros = estat.getCentros();
-		connexS = estat.getConnexS();
-		connexC = estat.getConnexC();
-		networkGrid = estat.getNetworkGrid();
+		connexSList = estat.getConnexSList();
+		connexCList = estat.getConnexCList();
 		coste = estat.getCoste();
-	}
-
-	// *************Occupacy para sensores y centros*************
-	// Controlar cada vez que añadimos una connexion a un sensor o centro.
-	public void setOccupacyS(ConnexSensor sensor) {
-		if (sensor.getConnectionIn().size() >= MAXINPUTSENSOR)
-			sensor.setIsFree(false);
-		else
-			sensor.setIsFree(true);
-	}
-
-	public void setOccupacyC(ConnexCentro centro) {
-		if (centro.getConnectionIn().size() >= MAXINPUTCENTER)
-			centro.setIsFree(false);
-		else
-			centro.setIsFree(true);
 	}
 
 	// operadors
@@ -268,20 +251,20 @@ public class Estat {
 		Estat.centros = centros;
 	}
 
-	public ArrayList<ConnexSensor> getConnexS() {
-		return connexS;
+	public ArrayList<ConnexSensor> getConnexSList() {
+		return connexSList;
 	}
 
-	public void setConnexS(ArrayList<ConnexSensor> connexS) {
-		this.connexS = connexS;
+	public void setConnexSList(ArrayList<ConnexSensor> connexS) {
+		this.connexSList = connexS;
 	}
 
-	public ArrayList<ConnexCentro> getConnexC() {
-		return connexC;
+	public ArrayList<ConnexCentro> getConnexCList() {
+		return connexCList;
 	}
 
-	public void setConnexC(ArrayList<ConnexCentro> connexC) {
-		this.connexC = connexC;
+	public void setConnexCList(ArrayList<ConnexCentro> connexC) {
+		this.connexCList = connexC;
 	}
 
 	public double getCoste() {
@@ -290,13 +273,5 @@ public class Estat {
 
 	public void setCoste(double coste) {
 		this.coste = coste;
-	}
-
-	public int[] getNetworkGrid() {
-		return networkGrid;
-	}
-
-	public void setNetworkGrid(int networkGrid[]) {
-		this.networkGrid = networkGrid;
 	}
 }
