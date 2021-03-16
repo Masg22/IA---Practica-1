@@ -343,6 +343,32 @@ public class Estat {
 			}
 		}
 
+		calcularCoste();
+	}
+
+	// calcul de la distancia	d(x, y) = squareroot((x1-y1)^2 + (x2-y2)^2)
+	// calcul del cost			cost(x,y) = d(x,y)^2 * v(x)
+	public void calcularCoste() {
+		coste = 0.0;
+		for (int i = 1; i <= connexSList.size(); ++i) {
+			
+			int x1 = sensores.get(i-1).getCoordX();
+			int y1 = sensores.get(i-1).getCoordY();
+			int x2 = 0;
+			int y2 = 0;
+			
+			int idOut = connexSList.get(i).getConnectionOut();
+			Double transmission = connexSList.get(i).getTransmission();
+			
+			if (idOut < 0) {
+				x2 = centros.get((-idOut)-1).getCoordX();
+				y2 = centros.get((-idOut)-1).getCoordY();	
+			} else {
+				x2 = sensores.get(idOut-1).getCoordX();
+				y2 = sensores.get(idOut-1).getCoordY();	
+			}
+			coste += ((x1-y1)*(x1-y1) + (x2-y2)*(x2-y2)) * transmission;
+		}
 	}
 
 	// * Operators *
@@ -369,7 +395,7 @@ public class Estat {
 
 				connexSList.get(sensorID).setConnectionOut(newConnexID);
 				connexCList.get(-newConnexID).addConnectionIn(sensorID);
-				
+
 				return true;
 			} else {
 				return false;
@@ -377,17 +403,17 @@ public class Estat {
 		} else { // Si la nova Conexio es a un Sensor
 			if (connexSList.get(newConnexID).getIsFree()) {
 				if (((connexSList.get(sensorID).getTransmission()
-						+ connexSList.get(newConnexID).getTransmission()) <= sensores.get(newConnexID - 1).getCapacidad()
-								* 3)) {
+						+ connexSList.get(newConnexID).getTransmission()) <= sensores.get(newConnexID - 1)
+								.getCapacidad() * 3)) {
 					if (oldConnexID < 0) { // Si sensorID estaba conectat a un Centre
 						connexCList.get(-oldConnexID).deleteConnexion(sensorID);
 					} else { // Si sensorID estaba conectat a un Sensor
 						connexSList.get(oldConnexID).deleteConnexion(sensorID);
 					}
-	
+
 					connexSList.get(sensorID).setConnectionOut(newConnexID);
 					connexSList.get(newConnexID).addConnectionIn(newConnexID, sensorID);
-	
+
 					return true;
 				} else {
 					return false;
