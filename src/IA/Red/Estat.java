@@ -286,6 +286,7 @@ public class Estat {
 				}
 			}
 		}
+		calcularCoste();
 	}
 
 	public void solucioInicial3() {
@@ -474,5 +475,8 @@ public class Estat {
 
 	public void setCoste(double coste) {
 		this.coste = coste;
+	}
+	public Boolean isGoalState() {
+		return false;
 	}
 }
