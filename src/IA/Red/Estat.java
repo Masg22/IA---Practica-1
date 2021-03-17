@@ -83,6 +83,7 @@ public class Estat {
 			this.transmission += transmission;
 		}
 
+			
 		// GETTERS
 		public ArrayList<Integer> getConnectionIn() {
 			return connectionIn;
@@ -122,10 +123,12 @@ public class Estat {
 	public class ConnexCentro {
 		private ArrayList<Integer> connectionIn;
 		private Boolean isFree;
+		private Double reception; 
 
 		public ConnexCentro() {
 			connectionIn = new ArrayList<Integer>(MAXINPUTCENTER);
 			isFree = true;
+			reception = 0.0;
 		}
 
 		public ConnexCentro(ArrayList<Integer> connectionIn) {
@@ -135,22 +138,29 @@ public class Estat {
 			} else {
 				this.isFree = true;
 			}
+			//no salvamos perdidas
+			for(int i = 1; i <= connectionIn.size(); ++i) {
+				this.reception += connexSList.get(connectionIn.get(i)).getTransmission(); 
+			}
 		}
 
 		public ConnexCentro(ConnexCentro cc) {
 			connectionIn = new ArrayList<Integer>(cc.connectionIn);
 			isFree = cc.isFree;
+			reception = cc.reception;
 		}
 
 		public void addConnectionIn(int sensorId) {
 			connectionIn.add(sensorId);
-			if (connectionIn.size() >= MAXINPUTCENTER) {
+			this.reception += connexSList.get(connectionIn.get(sensorId)).getTransmission();
+			if (connectionIn.size() >= MAXINPUTCENTER || this.reception == 150.0) {
 				isFree = false;
 			}
 		}
 
 		public void deleteConnexion(int sensorId) {
 			connectionIn.remove(connectionIn.indexOf(sensorId));
+			this.reception -= connexSList.get(connectionIn.get(sensorId)).getTransmission();
 			isFree = true;
 		}
 
@@ -162,6 +172,9 @@ public class Estat {
 		public Boolean getIsFree() {
 			return isFree;
 		}
+		public Double getRecepction() {
+			return reception;
+		}
 
 		// SETTERS
 		public void setConnectionIn(ArrayList<Integer> in) {
@@ -170,6 +183,9 @@ public class Estat {
 
 		public void setIsFree(Boolean free) {
 			this.isFree = free;
+		}
+		public void setRecepction(Double r) {
+			this.reception = r;
 		}
 	}
 
@@ -265,7 +281,7 @@ public class Estat {
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
 			for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
 				if (!sensorsConnected[i]) {
-					if (connexCList.get(jc).isFree) {
+					if (connexCList.get(jc).getIsFree() && connexSList.get(is).getTransmission() + connexCList.get(jc).getRecepction() <= 150.0) {
 						connexSList.get(is).setConnectionOut(-jc);
 						connexCList.get(jc).addConnectionIn(is);
 						sensorsConnected[i] = true;
@@ -277,7 +293,7 @@ public class Estat {
 		for (int i = 0, is = 1; i < sensorsConnected.length; i++, is++) {
 			if (!sensorsConnected[i]) {
 				for (int j = sensores.size() - 1, js = sensores.size(); j >= 0; j--, js--) {
-					if (connexSList.get(js).isFree && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
+					if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
 							+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
 						connexSList.get(is).setConnectionOut(js);
 						connexSList.get(js).addConnectionIn(js, is);
@@ -322,7 +338,7 @@ public class Estat {
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
 			for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
 				if (!sensorsConnected[i]) {
-					if (connexCList.get(jc).isFree) {
+					if (connexCList.get(jc).getIsFree() && connexSList.get(is).getTransmission() + connexCList.get(jc).getRecepction() <= 150.0) {
 						connexSList.get(is).setConnectionOut(-jc);
 						connexCList.get(jc).addConnectionIn(is);
 						sensorsConnected[i] = true;
@@ -334,7 +350,7 @@ public class Estat {
 		for (int i = 0, is = 1; i < sensorsConnected.length; i++, is++) {
 			if (!sensorsConnected[i]) {
 				for (int j = 0, js = 1; j < sensores.size(); j++, js++) {
-					if (connexSList.get(js).isFree && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
+					if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
 							+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
 						connexSList.get(is).setConnectionOut(js);
 						connexSList.get(js).addConnectionIn(js, is);
