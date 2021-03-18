@@ -10,6 +10,14 @@ public class Estat {
 	final static int MAXINPUTSENSOR = 3;
 	final static int MAXINPUTCENTER = 25;
 
+	private static int N;
+	private static int M;
+	private static int alfa, beta, gamma;
+	private static int nsensors; // numero de sensors
+	private static int ncentres; // numero de centres
+	private boolean connexions[][]; // la fila i indica les connex del node i
+	private static int redSensores[][]; // indica si hi ha algun node en una coordenada 0: res 1: central 2: sensor.
+
 	static Sensores sensores;
 	static CentrosDatos centros;
 
@@ -59,7 +67,7 @@ public class Estat {
 		public void addConnectionIn(int parentId, int sensorId) {
 			connectionIn.add(sensorId);
 
-			Double parentCapacity = sensores.get(parentId).getCapacidad();
+			Double parentCapacity = sensores.get(parentId-1).getCapacidad();
 			Double transmission1 = connexSList.get(sensorId).getTransmission();
 			this.addTranmission(transmission1);
 
@@ -175,6 +183,78 @@ public class Estat {
 
 	// * Constructors *
 
+	public void createNetwork(int n, int m, int nsens, int sensSeed, int ncent, int centSeed) {
+		N = n;
+		M = m;
+		nsensors = nsens;
+		ncentres = ncent;
+
+		connexions = new boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
+
+		redSensores = new int[N][M]; // La matriu ja esta a 0
+
+		sensores = new Sensores(nsens, sensSeed);
+		centros = new CentrosDatos(ncent, centSeed);
+
+		for (int i = 0; i < centros.size(); i++) {
+			int xc = centros.get(i).getCoordX();
+			int yc = centros.get(i).getCoordY();
+			redSensores[xc][yc] = 1;
+		}
+
+		for (int i = 0; i < sensores.size(); i++) {
+			int xs = sensores.get(i).getCoordX();
+			int ys = sensores.get(i).getCoordY();
+			redSensores[xs][ys] = 2;
+		}
+
+		nsens++;
+
+		// We add +1 to the number of sensors because we will use positive numbers for
+		// the Sensor ID, and
+		// negative IDs for the center. In that case, we cannot use the 0 position
+		// (there is not a -0 +0 id)
+
+		connexSList = new ArrayList<ConnexSensor>(nsens);
+		for (int i = 0; i < nsens; i++) {
+			connexSList.add(new ConnexSensor());
+		}
+
+		// We add +1 to the number of centers because we will use positive numbers for
+		// the Sensor ID, and
+		// negative IDs for the center. In that case, we cannot use the 0 position
+		// (there is not a -0 +0 id)
+
+		ncent++;
+
+		connexCList = new ArrayList<ConnexCentro>(ncent);
+		for (int i = 0; i < ncent; i++) {
+			connexCList.add(new ConnexCentro());
+		}
+
+		coste = 0.0;
+	}
+
+	public Estat() {
+		N = 100;
+		M = 100;
+		alfa = 3;
+		beta = 2;
+		gamma = 1;
+		nsensors = 100;
+		ncentres = 4;
+
+		sensores = new Sensores(nsensors, 1234);
+		;
+		centros = new CentrosDatos(ncentres, 1234);
+		;
+
+		connexSList = new ArrayList<ConnexSensor>(nsensors);
+		connexCList = new ArrayList<ConnexCentro>(ncentres);
+
+		coste = 0.0;
+	}
+
 	public Estat(int nsens, int sensSeed, int ncent, int centSeed) {
 
 		sensores = new Sensores(nsens, sensSeed);
@@ -211,6 +291,13 @@ public class Estat {
 	public Estat(Estat estat) {
 		sensores = estat.getSensores();
 		centros = estat.getCentros();
+
+		boolean aux[][] = estat.getConnexions();
+		connexions = new boolean[aux.length][aux.length];
+		for (int i = 0; i < nsensors + ncentres; i++)
+			for (int j = 0; j < nsensors + ncentres; j++)
+				connexions[i][j] = aux[i][j];
+
 		// We have to create a shadow copy of the ArrayList, not just the
 		// reference like "connexSList = estat.getConnexSList();"
 		connexSList = new ArrayList<ConnexSensor>(estat.getConnexSList());
@@ -219,6 +306,20 @@ public class Estat {
 	}
 
 	// * Functions *
+
+	public void generarEstatInicial(int tipus) {
+		switch (tipus) {
+		case 0:
+			solucioInicial1();
+			break;
+		case 1:
+			solucioInicial2();
+			break;
+		case 2:
+			solucioInicial3();
+			break;
+		}
+	}
 
 	public void solucioInicial1() {
 		Collections.sort(sensores, new Comparator<Sensor>() {
@@ -347,29 +448,44 @@ public class Estat {
 		calcularCoste();
 	}
 
-	// calcul de la distancia	d(x, y) = squareroot((x1-y1)^2 + (x2-y2)^2)
-	// calcul del cost			cost(x,y) = d(x,y)^2 * v(x)
+	// calcul de la distancia d(x, y) = squareroot((x1-y1)^2 + (x2-y2)^2)
+	// calcul del cost cost(x,y) = d(x,y)^2 * v(x)
 	public void calcularCoste() {
 		coste = 0.0;
-		for (int i = 1; i <= connexSList.size(); ++i) {
-			
-			int x1 = sensores.get(i-1).getCoordX();
-			int y1 = sensores.get(i-1).getCoordY();
+		for (int i = 1; i < connexSList.size(); ++i) {
+
+			int x1 = sensores.get(i - 1).getCoordX();
+			int y1 = sensores.get(i - 1).getCoordY();
 			int x2 = 0;
 			int y2 = 0;
-			
+
 			int idOut = connexSList.get(i).getConnectionOut();
 			Double transmission = connexSList.get(i).getTransmission();
-			
-			if (idOut < 0) {
-				x2 = centros.get((-idOut)-1).getCoordX();
-				y2 = centros.get((-idOut)-1).getCoordY();	
+
+			if (idOut == 0) {
+				coste += 0.0;
 			} else {
-				x2 = sensores.get(idOut-1).getCoordX();
-				y2 = sensores.get(idOut-1).getCoordY();	
+				if (idOut < 0) {
+					x2 = centros.get((-idOut) - 1).getCoordX();
+					y2 = centros.get((-idOut) - 1).getCoordY();
+				} else {
+					x2 = sensores.get(idOut - 1).getCoordX();
+					y2 = sensores.get(idOut - 1).getCoordY();
+				}
+				coste += ((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2)) * transmission;
 			}
-			coste += ((x1-y1)*(x1-y1) + (x2-y2)*(x2-y2)) * transmission;
 		}
+	}
+
+	public void actualitzarParametres(int a, int b, int g, int mnr) {
+		alfa = a;
+		beta = b;
+		gamma = g;
+		calcularCoste();
+	}
+
+	public Boolean isGoalState() {
+		return false;
 	}
 
 	// * Operators *
@@ -476,7 +592,48 @@ public class Estat {
 	public void setCoste(double coste) {
 		this.coste = coste;
 	}
-	public Boolean isGoalState() {
-		return false;
+
+	public int getN() {
+		return N;
+	}
+
+	public void setN(int n) {
+		N = n;
+	}
+
+	public int getM() {
+		return M;
+	}
+
+	public void setM(int m) {
+		M = m;
+	}
+
+	public int getAlfa() {
+		return alfa;
+	}
+
+	public int getBeta() {
+		return beta;
+	}
+
+	public int getGamma() {
+		return gamma;
+	}
+
+	public int getNsensors() {
+		return nsensors;
+	}
+
+	public int getNcentres() {
+		return ncentres;
+	}
+
+	public boolean[][] getConnexions() {
+		return connexions;
+	}
+
+	public int[][] getRedSensores() {
+		return redSensores;
 	}
 }
