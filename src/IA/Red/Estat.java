@@ -158,7 +158,7 @@ public class Estat {
 			if (connectionIn.size() >= MAXINPUTCENTER) {
 				this.isFree = false;
 			} else {
-				this.isFree = true;
+				this.isFree = true; 
 			}
 		}
 
