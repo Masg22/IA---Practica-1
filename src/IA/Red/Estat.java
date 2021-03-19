@@ -69,7 +69,8 @@ public class Estat {
 
 			Double parentCapacity = sensores.get(parentId-1).getCapacidad();
 			Double transmission1 = connexSList.get(sensorId).getTransmission();
-			this.addTranmission(transmission1);
+			
+			this.recActTransmission(transmission1);
 
 			if (connectionIn.size() >= MAXINPUTSENSOR) {
 				isFree = false;
@@ -82,14 +83,28 @@ public class Estat {
 			connectionIn.remove(connectionIn.indexOf(sensorId));
 
 			Double transmission1 = connexSList.get(sensorId).getTransmission();
-			this.addTranmission(-transmission1);
+			
+			this.recActTransmission(-transmission1);
 
 			isFree = true;
 		}
 
+		//M: creo que hay que eliminarla -> la he metido dentro de recActTransmission()
 		public void addTranmission(Double tranmission) {
 			this.transmission += transmission;
 		}
+		
+		public void recActTransmission(Double tranmissionChange){
+			this.transmission += tranmissionChange;
+			
+			if (this.connectionOut < 0) { //es un centro
+				connexCList.get(- this.connectionOut).actCapacity(tranmissionChange);
+			}
+			else { // es otro sensor
+				connexSList.get(this.connectionOut).recActTransmission(tranmissionChange);
+			}
+		}
+		
 
 		// GETTERS
 		public ArrayList<Integer> getConnectionIn() {
@@ -130,6 +145,8 @@ public class Estat {
 	public class ConnexCentro {
 		private ArrayList<Integer> connectionIn;
 		private Boolean isFree;
+		private Double capacity;
+		//M: Hay que Modificar la capacidad cada vez que añadimos un nuevo nodo directamente al centro o lo desconectamos 
 
 		public ConnexCentro() {
 			connectionIn = new ArrayList<Integer>(MAXINPUTCENTER);
@@ -160,6 +177,12 @@ public class Estat {
 		public void deleteConnexion(int sensorId) {
 			connectionIn.remove(connectionIn.indexOf(sensorId));
 			isFree = true;
+		}
+		
+		public void actCapacity(Double capacityChange) {
+			
+			// M: comprobamos aqui que si se suma una capacidad y excede el limite de 150 no se pueda ejecutar la operacion ¿?
+			this.capacity += capacityChange;
 		}
 
 		// GETTERS
@@ -360,7 +383,7 @@ public class Estat {
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
 
 		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
-			connexSList.get(is).addTranmission(sensores.get(i).getCapacidad());
+			connexSList.get(is).addTranmission(sensores.get(i).getCapacidad()); //M: puede que haya que cambiarlo a recActTranssmission ¿?
 		}
 
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
