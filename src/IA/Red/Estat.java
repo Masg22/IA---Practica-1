@@ -146,12 +146,12 @@ public class Estat {
 	public class ConnexCentro {
 		private ArrayList<Integer> connectionIn;
 		private Boolean isFree;
-<<<<<<< HEAD
+
 		private Double reception; 
-=======
+
 		private Double capacity;
 		//M: Hay que Modificar la capacidad cada vez que añadimos un nuevo nodo directamente al centro o lo desconectamos 
->>>>>>> Estat
+
 
 		public ConnexCentro() {
 			connectionIn = new ArrayList<Integer>(MAXINPUTCENTER);
@@ -519,6 +519,14 @@ public class Estat {
 		}
 	}
 
+	public void eraseCost(int x1, int y1, int x2, int y2, Double trans) {
+		coste -= ((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2)) * trans;
+	}
+	
+	public void sumCost(int x1, int y1, int x2, int y2, Double trans) {
+		coste += ((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2)) * trans;
+	}
+	
 	public void actualitzarParametres(int a, int b, int g, int mnr) {
 		alfa = a;
 		beta = b;
@@ -541,19 +549,55 @@ public class Estat {
 	// de sensor o centre segons convingui
 
 	public Boolean createConnexionS(Integer sensorID, Integer newConnexID) {
+		int x1,y1,x2,y2;
+		Double trans;
 		int oldConnexID = connexSList.get(sensorID).getConnectionOut();
 
 		if (newConnexID < 0) { // Si la nova Conexio es a un Centre
 			if (connexCList.get(-newConnexID).getIsFree()) {
 
 				if (oldConnexID < 0) { // Si sensorID estaba conectat a un Centre
+					
+					
+					x1 = sensores.get(sensorID).getCoordX();
+					y1 = sensores.get(sensorID).getCoordY();
+					
+					x2 = centros.get(-oldConnexID).getCoordX();
+					y2 = centros.get(-oldConnexID).getCoordY();
+					
+					trans = connexSList.get(sensorID).getTransmission();
+					
+					eraseCost(x1,y1,x2,y2,trans);
+					
 					connexCList.get(-oldConnexID).deleteConnexion(sensorID);
+					
+					
 				} else { // Si sensorID estaba conectat a un Sensor
+					x1 = sensores.get(sensorID).getCoordX();
+					y1 = sensores.get(sensorID).getCoordY();
+					
+					x2 = sensores.get(oldConnexID).getCoordX();
+					y2 = sensores.get(oldConnexID).getCoordY();
+					
+					trans = connexSList.get(sensorID).getTransmission();
+					
+					eraseCost(x1,y1,x2,y2,trans);
+					
 					connexSList.get(oldConnexID).deleteConnexion(sensorID);
 				}
 
 				connexSList.get(sensorID).setConnectionOut(newConnexID);
 				connexCList.get(-newConnexID).addConnectionIn(sensorID);
+				
+				x1 = sensores.get(sensorID).getCoordX();
+				y1 = sensores.get(sensorID).getCoordY();
+				
+				x2 = centros.get(-newConnexID).getCoordX();
+				y2 = centros.get(-newConnexID).getCoordY();
+				
+				trans = connexSList.get(sensorID).getTransmission();
+				
+				sumCost(x1,y1,x2,y2,trans);
 
 				return true;
 			} else {
@@ -565,13 +609,45 @@ public class Estat {
 						+ connexSList.get(newConnexID).getTransmission()) <= sensores.get(newConnexID - 1)
 								.getCapacidad() * 3)) {
 					if (oldConnexID < 0) { // Si sensorID estaba conectat a un Centre
+						
+						x1 = sensores.get(sensorID).getCoordX();
+						y1 = sensores.get(sensorID).getCoordY();
+						
+						x2 = centros.get(-oldConnexID).getCoordX();
+						y2 = centros.get(-oldConnexID).getCoordY();
+						
+						trans = connexSList.get(sensorID).getTransmission();
+						
+						eraseCost(x1,y1,x2,y2,trans);
+						
 						connexCList.get(-oldConnexID).deleteConnexion(sensorID);
 					} else { // Si sensorID estaba conectat a un Sensor
+						x1 = sensores.get(sensorID).getCoordX();
+						y1 = sensores.get(sensorID).getCoordY();
+						
+						x2 = sensores.get(oldConnexID).getCoordX();
+						y2 = sensores.get(oldConnexID).getCoordY();
+						
+						trans = connexSList.get(sensorID).getTransmission();
+						
+						eraseCost(x1,y1,x2,y2,trans);
+						
 						connexSList.get(oldConnexID).deleteConnexion(sensorID);
 					}
 
 					connexSList.get(sensorID).setConnectionOut(newConnexID);
 					connexSList.get(newConnexID).addConnectionIn(newConnexID, sensorID);
+					
+					
+					x1 = sensores.get(sensorID).getCoordX();
+					y1 = sensores.get(sensorID).getCoordY();
+					
+					x2 = sensores.get(newConnexID).getCoordX();
+					y2 = sensores.get(newConnexID).getCoordY();
+					
+					trans = connexSList.get(sensorID).getTransmission();
+					
+					sumCost(x1,y1,x2,y2,trans);
 
 					return true;
 				} else {
