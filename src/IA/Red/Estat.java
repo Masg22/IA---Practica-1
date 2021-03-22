@@ -89,18 +89,18 @@ public class Estat {
 		}
 
 		//M: creo que hay que eliminarla -> la he metido dentro de recActTransmission()
-		public void addTranmission(Double tranmission) {
+		public void addTransmission(Double transmission) {
 			this.transmission += transmission;
 		}
 		
-		public void recActTransmission(Double tranmissionChange){
-			this.transmission += tranmissionChange;
+		public void recActTransmission(Double transmissionChange){
+			this.transmission += transmissionChange;
 			
 			if (this.connectionOut < 0) { //es un centro
-				connexCList.get(- this.connectionOut).actCapacity(tranmissionChange);
+				connexCList.get(- this.connectionOut).actCapacity(transmissionChange);
 			}
 			else { // es otro sensor
-				connexSList.get(this.connectionOut).recActTransmission(tranmissionChange);
+				connexSList.get(this.connectionOut).recActTransmission(transmissionChange);
 			}
 		}
 		
@@ -385,7 +385,7 @@ public class Estat {
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
 
 		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
-			connexSList.get(is).addTranmission(sensores.get(i).getCapacidad()); //M: puede que haya que cambiarlo a recActTranssmission �?
+			connexSList.get(is).addTransmission(sensores.get(i).getCapacidad()); //M: puede que haya que cambiarlo a recActTranssmission �?
 		}
 
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
@@ -442,7 +442,7 @@ public class Estat {
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
 
 		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
-			connexSList.get(is).addTranmission(sensores.get(i).getCapacidad());
+			connexSList.get(is).addTransmission(sensores.get(i).getCapacidad());
 		}
 
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
