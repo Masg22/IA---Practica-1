@@ -20,17 +20,21 @@ public class RedProblem {
 			display();
 			opcion = in.nextInt();
 			if(opcion == 1) {
-				System.out.println("Seed or -1 for a random one");
-				Integer seed = in.nextInt();
-				if(seed < 0) seed = random.nextInt();
+				System.out.println("Sensors Seed or -1 for a random one");
+				Integer sseed = in.nextInt();
+				if(sseed < 0) sseed = random.nextInt();
 				
 				System.out.println("Number of sensors");
 				Integer nsens = in.nextInt();
 				
+				System.out.println("Centers Seed or -1 for a random one");
+				Integer cseed = in.nextInt();
+				if(cseed < 0) cseed = random.nextInt();
+				
 				System.out.println("Number of centers");
 				Integer ncent = in.nextInt();
 				
-				Estat estat = new Estat(nsens, seed, ncent, seed);
+				Estat estat = new Estat(nsens, sseed, ncent, cseed);
 				estat.solucioInicial3();
 				HillClimbingSearch(estat);
 			}

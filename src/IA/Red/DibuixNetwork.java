@@ -151,17 +151,6 @@ public class DibuixNetwork extends Dibuix {
 	public void actualitzar() throws Exception {
 		esborrarFletxes();
 		
-		/*
-		ArrayList<ConnexSensor> llistaConnexions = estat.getConnexSList();
-		Sensores sensors = estat.getSensores();
-		
-		for(int i = 0, is = 1; i < llistaConnexions.size(); i++, is++) {
-			int indexOut = llistaConnexions.get(is).getConnectionOut();
-			dibuixarConnexio(i, indexOut);
-		}
-		
-		*/
-		
 		boolean[][] connexions = estat.getConnexions();
 		for (int i = 0; i < connexions.length; i++) {
 			for (int j = 0; j < connexions[i].length; j++) {

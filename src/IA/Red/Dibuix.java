@@ -1158,7 +1158,7 @@ public class Dibuix extends Canvas {
 			}
 			// dibuix del tronc de la fletxa
 			g.drawLine(x1, y1, x2, y2);
-			g.drawLine(x1 + 1, y1 + 1, x2 + 1, y2 + 1);
+			//g.drawLine(x1 + 1, y1 + 1, x2 + 1, y2 + 1);
 			/*
 			 * dibuixar fletxa, crear un triangle que apunti a un extrem del punt de la
 			 * direccio d'on ve la fletxa

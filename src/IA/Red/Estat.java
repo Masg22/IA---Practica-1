@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import IA.Red.UIMain;
 
 public class Estat {
 
@@ -19,6 +20,9 @@ public class Estat {
 
 	static Sensores sensores;
 	static CentrosDatos centros;
+	
+	private Sensores origSensores;
+	private CentrosDatos origCentros;
 
 	// Llistat de Connexions dels sensors
 	private ArrayList<ConnexSensor> connexSList;
@@ -69,7 +73,7 @@ public class Estat {
 			Double parentCapacity = sensores.get(parentId-1).getCapacidad();
 			Double transmission1 = connexSList.get(sensorId).getTransmission();
 			
-			this.recActTransmission(transmission1);
+			//this.recActTransmission(transmission1);
 
 			if (connectionIn.size() >= MAXINPUTSENSOR) {
 				isFree = false;
@@ -96,23 +100,26 @@ public class Estat {
 		public void recActTransmission(Double transmissionChange){
 			this.transmission += transmissionChange;
 			
+			System.out.println("Transmission:" + transmission);
+			
 			if (this.connectionOut < 0) { //es un centro
-				connexCList.get(- this.connectionOut).actCapacity(transmissionChange);
+				System.out.println("ConnOut C:" + connectionOut);
+				connexCList.get(-(this.connectionOut)).actCapacity(transmissionChange);
 			}
 			else { // es otro sensor
+				System.out.println("ConnOut S:" + connectionOut);
 				connexSList.get(this.connectionOut).recActTransmission(transmissionChange);
 			}
 		}
 		
 		public Boolean checkExit(Integer sensorReplaced) {
-			if (connectionOut == sensorReplaced) return false;
-			else if (connectionOut < 0) return true;
+			if (this.connectionOut == sensorReplaced) return false;
+			else if (this.connectionOut < 0) return true;
 			else {
-				return connexSList.get(connectionOut).checkExit(sensorReplaced);
+				return connexSList.get(this.connectionOut).checkExit(sensorReplaced);
 			}
 		}
 		
-
 			
 		// GETTERS
 		public ArrayList<Integer> getConnectionIn() {
@@ -233,22 +240,32 @@ public class Estat {
 	// * Constructors *
 
 	public void createNetwork(int n, int m, int nsens, int sensSeed, int ncent, int centSeed) {
+		coste = 0.0;
 		N = n;
 		M = m;
 		nsensors = nsens;
 		ncentres = ncent;
 
-	//	connexions = new Boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
+		connexions = new boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
+		for (int i = 0; i < nsensors + ncentres; i++)
+			for (int j = 0; j < nsensors + ncentres; j++)
+				connexions[i][j] = false;
 
 		sensores = new Sensores(nsens, sensSeed);
 		centros = new CentrosDatos(ncent, centSeed);
-
-		nsens++;
+		
+		origSensores = new Sensores(nsens, sensSeed);
+		origCentros = new CentrosDatos(ncent, centSeed);
+		
+		connexSList.clear();
+		connexCList.clear();
 
 		// We add +1 to the number of sensors because we will use positive numbers for
 		// the Sensor ID, and
 		// negative IDs for the center. In that case, we cannot use the 0 position
 		// (there is not a -0 +0 id)
+
+		nsens++;
 
 		connexSList = new ArrayList<ConnexSensor>(nsens);
 		for (int i = 0; i < nsens; i++) {
@@ -266,8 +283,6 @@ public class Estat {
 		for (int i = 0; i < ncent; i++) {
 			connexCList.add(new ConnexCentro());
 		}
-
-		coste = 0.0;
 	}
 
 	public Estat() {
@@ -280,7 +295,10 @@ public class Estat {
 		ncentres = 4;
 
 		sensores = new Sensores(nsensors, 1234);
-		centros = new CentrosDatos(ncentres, 1234);
+		centros = new CentrosDatos(ncentres, 4321);
+		
+		origSensores = new Sensores(nsensors, 1234);
+		origCentros = new CentrosDatos(ncentres, 4321);
 
 		connexSList = new ArrayList<ConnexSensor>(nsensors);
 		connexCList = new ArrayList<ConnexCentro>(ncentres);
@@ -291,8 +309,10 @@ public class Estat {
 	public Estat(int nsens, int sensSeed, int ncent, int centSeed) {
 
 		sensores = new Sensores(nsens, sensSeed);
-
 		centros = new CentrosDatos(ncent, centSeed);
+		
+		origSensores = new Sensores(nsens, sensSeed);
+		origCentros = new CentrosDatos(ncent, centSeed);
 
 		// We add +1 to the number of sensors because we will use positive numbers for
 		// the Sensor ID, and
@@ -325,11 +345,11 @@ public class Estat {
 		sensores = estat.getSensores();
 		centros = estat.getCentros();
 
-		//boolean aux[][] = estat.getConnexions();
-		//connexions = new boolean[aux.length][aux[0].length];
-		//for (int i = 0; i < nsensors + ncentres; i++)
-			//for (int j = 0; j < nsensors + ncentres; j++)
-				//connexions[i][j] = aux[i][j];
+		boolean aux[][] = estat.getConnexions();
+		connexions = new boolean[aux.length][aux[0].length];
+		for (int i = 0; i < nsensors + ncentres; i++)
+			for (int j = 0; j < nsensors + ncentres; j++)
+				connexions[i][j] = aux[i][j];
 
 		// We have to create a shadow copy of the ArrayList, not just the
 		// reference like "connexSList = estat.getConnexSList();"
@@ -355,96 +375,35 @@ public class Estat {
 	}
 
 	public void solucioInicial1() {
-		Collections.sort(sensores, new Comparator<Sensor>() {
-			@Override
-			public int compare(Sensor s1, Sensor s2) {
-				return ((Double) s2.getCapacidad()).compareTo((Double) s1.getCapacidad());
-			}
-		});
+		coste = 0.0;
+		
+		sensores.clear();
+		centros.clear();
+		
+		sensores.addAll(origSensores);
+		centros.addAll(origCentros);
+		
+		System.out.println("SOL1  S:" + sensores.toString());
+		System.out.println("SOL1  C:" + centros.toString());
+		
+		connexSList.clear();
+		connexCList.clear();
 
-		// It is useful ?
-
-	}
-
-	public void solucioInicial2() {
-		Collections.sort(sensores, new Comparator<Sensor>() {
-			@Override
-			public int compare(Sensor s1, Sensor s2) {
-				// We sort the sensors with the distance from the 0,0 coordinate
-				Integer distS1 = (s1.getCoordX() * s1.getCoordX()) + (s1.getCoordY() * s1.getCoordY());
-				Integer distS2 = (s2.getCoordX() * s2.getCoordX()) + (s2.getCoordY() * s2.getCoordY());
-
-				return (distS2.compareTo(distS1));
-			}
-		});
-
-		Collections.sort(centros, new Comparator<Centro>() {
-			@Override
-			public int compare(Centro c1, Centro c2) {
-				// We sort the centers with the distance from the 0,0 coordinate
-				Integer distC1 = (c1.getCoordX() * c1.getCoordX()) + (c1.getCoordY() * c1.getCoordY());
-				Integer distC2 = (c2.getCoordX() * c2.getCoordX()) + (c2.getCoordY() * c2.getCoordY());
-
-				return (distC2.compareTo(distC1));
-			}
-		});
-
-		Boolean[] sensorsConnected = new Boolean[sensores.size()];
-		Arrays.fill(sensorsConnected, Boolean.FALSE);
-
-		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
-			connexSList.get(is).addTransmission(sensores.get(i).getCapacidad()); //M: puede que haya que cambiarlo a recActTranssmission �?
+		connexSList = new ArrayList<ConnexSensor>(nsensors+1);
+		for (int i = 0; i < nsensors+1; i++) {
+			connexSList.add(new ConnexSensor());
 		}
 
-		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
-			for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
-				if (!sensorsConnected[i]) {
-					if (connexCList.get(jc).getIsFree() && connexSList.get(is).getTransmission() + connexCList.get(jc).getRecepction() <= 150.0) {
-						connexSList.get(is).setConnectionOut(-jc);
-						connexCList.get(jc).addConnectionIn(is);
-						sensorsConnected[i] = true;
-					}
-				}
-			}
+		connexCList = new ArrayList<ConnexCentro>(ncentres+1);
+		for (int i = 0; i < ncentres+1; i++) {
+			connexCList.add(new ConnexCentro());
 		}
-
-		for (int i = 0, is = 1; i < sensorsConnected.length; i++, is++) {
-			if (!sensorsConnected[i]) {
-				for (int j = sensores.size() - 1, js = sensores.size(); j >= 0; j--, js--) {
-					if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
-							+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
-						connexSList.get(is).setConnectionOut(js);
-						connexSList.get(js).addConnectionIn(js, is);
-						sensorsConnected[i] = true;
-					}
-				}
-			}
-		}
-		calcularCoste();
-	}
-
-	public void solucioInicial3() {
-		Collections.sort(sensores, new Comparator<Sensor>() {
-			@Override
-			public int compare(Sensor s1, Sensor s2) {
-				// We sort the sensors with the distance from the 0,0 coordinate
-				Integer distS1 = (s1.getCoordX() * s1.getCoordX()) + (s1.getCoordY() * s1.getCoordY());
-				Integer distS2 = (s2.getCoordX() * s2.getCoordX()) + (s2.getCoordY() * s2.getCoordY());
-
-				return (distS2.compareTo(distS1));
-			}
-		});
-
-		Collections.sort(centros, new Comparator<Centro>() {
-			@Override
-			public int compare(Centro c1, Centro c2) {
-				// We sort the centers with the distance from the 0,0 coordinate
-				Integer distC1 = (c1.getCoordX() * c1.getCoordX()) + (c1.getCoordY() * c1.getCoordY());
-				Integer distC2 = (c2.getCoordX() * c2.getCoordX()) + (c2.getCoordY() * c2.getCoordY());
-
-				return (distC2.compareTo(distC1));
-			}
-		});
+		
+		for (int i = 0; i < nsensors + ncentres; i++)
+			for (int j = 0; j < nsensors + ncentres; j++)
+				connexions[i][j] = false;
+		
+		UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -456,9 +415,10 @@ public class Estat {
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
 			for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
 				if (!sensorsConnected[i]) {
-					if (connexCList.get(jc).getIsFree() && connexSList.get(is).getTransmission() + connexCList.get(jc).getRecepction() <= 150.0) {
+					if (connexCList.get(jc).getIsFree() && (connexSList.get(is).getTransmission() + connexCList.get(jc).getRecepction() <= 150.0)) {
 						connexSList.get(is).setConnectionOut(-jc);
 						connexCList.get(jc).addConnectionIn(is);
+						connexions[i][nsensors+j] = true;
 						sensorsConnected[i] = true;
 					}
 				}
@@ -472,6 +432,175 @@ public class Estat {
 							+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
 						connexSList.get(is).setConnectionOut(js);
 						connexSList.get(js).addConnectionIn(js, is);
+						connexions[i][j] = true;
+						sensorsConnected[i] = true;
+					}
+				}
+			}
+		}
+
+		calcularCoste();
+
+	}
+
+	public void solucioInicial2() {
+		coste = 0.0;
+		
+		connexSList.clear();
+		connexCList.clear();
+
+		connexSList = new ArrayList<ConnexSensor>(nsensors+1);
+		for (int i = 0; i < nsensors+1; i++) {
+			connexSList.add(new ConnexSensor());
+		}
+
+		connexCList = new ArrayList<ConnexCentro>(ncentres+1);
+		for (int i = 0; i < ncentres+1; i++) {
+			connexCList.add(new ConnexCentro());
+		}
+		
+		for (int i = 0; i < nsensors + ncentres; i++)
+			for (int j = 0; j < nsensors + ncentres; j++)
+				connexions[i][j] = false;
+		
+		Collections.sort(sensores, new Comparator<Sensor>() {
+			@Override
+			public int compare(Sensor s1, Sensor s2) {
+				// We sort the sensors with the distance from the 0,0 coordinate
+				Integer distS1 = (s1.getCoordX() * s1.getCoordX()) + (s1.getCoordY() * s1.getCoordY());
+				Integer distS2 = (s2.getCoordX() * s2.getCoordX()) + (s2.getCoordY() * s2.getCoordY());
+
+				return (distS1.compareTo(distS2));
+			}
+		});
+		
+		Collections.sort(centros, new Comparator<Centro>() {
+			@Override
+			public int compare(Centro c1, Centro c2) {
+				// We sort the centers with the distance from the 0,0 coordinate
+				Integer distC1 = (c1.getCoordX() * c1.getCoordX()) + (c1.getCoordY() * c1.getCoordY());
+				Integer distC2 = (c2.getCoordX() * c2.getCoordX()) + (c2.getCoordY() * c2.getCoordY());
+
+				return (distC1.compareTo(distC2));
+			}
+		});
+		
+		System.out.println("SOL2  S:" + sensores.toString());
+		System.out.println("SOL2  C:" + centros.toString());
+		
+		UIMain.modificaNetworkRePaint(this);
+
+		Boolean[] sensorsConnected = new Boolean[sensores.size()];
+		Arrays.fill(sensorsConnected, Boolean.FALSE);
+
+		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
+			connexSList.get(is).addTransmission(sensores.get(i).getCapacidad());
+		}
+
+		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
+			for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
+				if (!sensorsConnected[i]) {
+					if (connexCList.get(jc).getIsFree() && (connexSList.get(is).getTransmission() + connexCList.get(jc).getRecepction() <= 150.0)) {
+						connexSList.get(is).setConnectionOut(-jc);
+						connexCList.get(jc).addConnectionIn(is);
+						connexions[i][nsensors+j] = true;
+						sensorsConnected[i] = true;
+					}
+				}
+			}
+		}
+
+		for (int i = 0, is = 1; i < sensorsConnected.length; i++, is++) {
+			if (!sensorsConnected[i]) {
+				for (int j = sensores.size() - 1, js = sensores.size(); j >= 0; j--, js--) {
+					if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
+							+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
+						connexSList.get(is).setConnectionOut(js);
+						connexSList.get(js).addConnectionIn(js, is);
+						connexions[i][j] = true;
+						sensorsConnected[i] = true;
+					}
+				}
+			}
+		}
+		calcularCoste();
+	}
+
+	public void solucioInicial3() {
+		coste = 0.0;
+		
+		connexSList.clear();
+		connexCList.clear();
+
+		connexSList = new ArrayList<ConnexSensor>(nsensors+1);
+		for (int i = 0; i < nsensors+1; i++) {
+			connexSList.add(new ConnexSensor());
+		}
+
+		connexCList = new ArrayList<ConnexCentro>(ncentres+1);
+		for (int i = 0; i < ncentres+1; i++) {
+			connexCList.add(new ConnexCentro());
+		}
+		
+		for (int i = 0; i < nsensors + ncentres; i++)
+			for (int j = 0; j < nsensors + ncentres; j++)
+				connexions[i][j] = false;
+		
+		Collections.sort(sensores, new Comparator<Sensor>() {
+			@Override
+			public int compare(Sensor s1, Sensor s2) {
+				// We sort the sensors with the distance from the 0,0 coordinate
+				Integer distS1 = (s1.getCoordX() * s1.getCoordX()) + (s1.getCoordY() * s1.getCoordY());
+				Integer distS2 = (s2.getCoordX() * s2.getCoordX()) + (s2.getCoordY() * s2.getCoordY());
+
+				return (distS2.compareTo(distS1));
+			}
+		});
+
+		Collections.sort(centros, new Comparator<Centro>() {
+			@Override
+			public int compare(Centro c1, Centro c2) {
+				// We sort the centers with the distance from the 0,0 coordinate
+				Integer distC1 = (c1.getCoordX() * c1.getCoordX()) + (c1.getCoordY() * c1.getCoordY());
+				Integer distC2 = (c2.getCoordX() * c2.getCoordX()) + (c2.getCoordY() * c2.getCoordY());
+
+				return (distC2.compareTo(distC1));
+			}
+		});
+		
+		System.out.println("SOL3  S:" + sensores.toString());
+		System.out.println("SOL3  C:" + centros.toString());
+		
+		UIMain.modificaNetworkRePaint(this);
+
+		Boolean[] sensorsConnected = new Boolean[sensores.size()];
+		Arrays.fill(sensorsConnected, Boolean.FALSE);
+
+		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
+			connexSList.get(is).addTransmission(sensores.get(i).getCapacidad());
+		}
+
+		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
+			for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
+				if (!sensorsConnected[i]) {
+					if (connexCList.get(jc).getIsFree() && (connexSList.get(is).getTransmission() + connexCList.get(jc).getRecepction() <= 150.0)) {
+						connexSList.get(is).setConnectionOut(-jc);
+						connexCList.get(jc).addConnectionIn(is);
+						connexions[i][nsensors+j] = true;
+						sensorsConnected[i] = true;
+					}
+				}
+			}
+		}
+
+		for (int i = 0, is = 1; i < sensorsConnected.length; i++, is++) {
+			if (!sensorsConnected[i]) {
+				for (int j = 0, js = 1; j < sensores.size(); j++, js++) {
+					if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
+							+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
+						connexSList.get(is).setConnectionOut(js);
+						connexSList.get(js).addConnectionIn(js, is);
+						connexions[i][j] = true;
 						sensorsConnected[i] = true;
 					}
 				}

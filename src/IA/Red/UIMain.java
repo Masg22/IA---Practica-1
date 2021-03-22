@@ -916,6 +916,10 @@ public class UIMain extends JFrame {
 		textErrorInicial();
 	}// GEN-LAST:event_generarNetworkButtonActionPerformed
 
+	public static void modificaNetworkRePaint(Estat estat) {
+		dibuixNetwork1.novaNetwork(estat);
+	}
+	
 	private void textErrorInicial() {
 		errorInicialLabel.setText("Error Inicial: " + estat.getCoste());
 		errorInicialLabel1.setText("Error Inicial: " + estat.getCoste());
@@ -1037,7 +1041,7 @@ public class UIMain extends JFrame {
 	private javax.swing.JButton actualitzarParamsButton;
 	private javax.swing.JTextField alfaText;
 	private javax.swing.JTextField betaText;
-	private IA.Red.DibuixNetwork dibuixNetwork1;
+	private static IA.Red.DibuixNetwork dibuixNetwork1;
 	private IA.Red.DibuixNetwork dibuixNetworkHC;
 	private IA.Red.DibuixNetwork dibuixNetworkSA;
 	private javax.swing.JLabel errorInicialLabel;
