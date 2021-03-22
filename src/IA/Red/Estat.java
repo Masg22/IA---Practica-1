@@ -104,6 +104,14 @@ public class Estat {
 			}
 		}
 		
+		public Boolean checkExit(Integer sensorReplaced) {
+			if (connectionOut == sensorReplaced) return false;
+			else if (connectionOut < 0) return true;
+			else {
+				return connexSList.get(connectionOut).checkExit(sensorReplaced);
+			}
+		}
+		
 
 			
 		// GETTERS
@@ -537,8 +545,7 @@ public class Estat {
 		int oldConnexID = connexSList.get(sensorID).getConnectionOut();
 
 		if (newConnexID < 0) { // Si la nova Conexio es a un Centre
-			if (connexCList.get(-newConnexID).getIsFree()) {
-
+			if (connexCList.get(-newConnexID).getIsFree() && connexSList.get(sensorID).getTransmission() + connexCList.get(-newConnexID).getRecepction() <= 150.0 ) {
 				if (oldConnexID < 0) { // Si sensorID estaba conectat a un Centre
 					
 					
@@ -587,7 +594,7 @@ public class Estat {
 				return false;
 			}
 		} else { // Si la nova Conexio es a un Sensor
-			if (connexSList.get(newConnexID).getIsFree()) {
+			if (connexSList.get(newConnexID).getIsFree() && connexSList.get(newConnexID).checkExit(sensorID)) {
 				if (((connexSList.get(sensorID).getTransmission()
 						+ connexSList.get(newConnexID).getTransmission()) <= sensores.get(newConnexID - 1)
 								.getCapacidad() * 3)) {
