@@ -24,13 +24,18 @@ public class RedProblem {
 				Integer seed = in.nextInt();
 				if(seed < 0) seed = random.nextInt();
 				
+				System.out.println("Seed2 or -1 for a random one");
+				Integer seed2 = in.nextInt();
+				if(seed2 < 0) seed2 = random.nextInt();
+				
 				System.out.println("Number of sensors");
 				Integer nsens = in.nextInt();
+				
 				
 				System.out.println("Number of centers");
 				Integer ncent = in.nextInt();
 				
-				Estat estat = new Estat(nsens, seed, ncent, seed);
+				Estat estat = new Estat(nsens, seed, ncent, seed2);
 				estat.solucioInicial3();
 				HillClimbingSearch(estat);
 			}
