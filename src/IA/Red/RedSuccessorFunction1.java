@@ -14,7 +14,7 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 			for (int j = 0; j < estat.centros.size(); ++j) {
 				Estat newState = new Estat(estat);
 				// tots els centres posibles
-				if (newState.createConnexionS(i + 1, -j - 1)) {
+				if (newState.createConnexionS(i + 1, -(j) - 1)) {
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to center" + j + "\n");
 					llistaSucc.add(new Successor(S.toString(), newState));

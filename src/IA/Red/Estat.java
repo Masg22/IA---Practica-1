@@ -16,7 +16,6 @@ public class Estat {
 	private static int nsensors; // numero de sensors
 	private static int ncentres; // numero de centres
 	private boolean connexions[][]; // la fila i indica les connex del node i
-	private static int redSensores[][]; // indica si hi ha algun node en una coordenada 0: res 1: central 2: sensor.
 
 	static Sensores sensores;
 	static CentrosDatos centros;
@@ -191,22 +190,8 @@ public class Estat {
 
 		connexions = new boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
 
-		redSensores = new int[N][M]; // La matriu ja esta a 0
-
 		sensores = new Sensores(nsens, sensSeed);
 		centros = new CentrosDatos(ncent, centSeed);
-
-		for (int i = 0; i < centros.size(); i++) {
-			int xc = centros.get(i).getCoordX();
-			int yc = centros.get(i).getCoordY();
-			redSensores[xc][yc] = 1;
-		}
-
-		for (int i = 0; i < sensores.size(); i++) {
-			int xs = sensores.get(i).getCoordX();
-			int ys = sensores.get(i).getCoordY();
-			redSensores[xs][ys] = 2;
-		}
 
 		nsens++;
 
@@ -245,9 +230,7 @@ public class Estat {
 		ncentres = 4;
 
 		sensores = new Sensores(nsensors, 1234);
-		;
 		centros = new CentrosDatos(ncentres, 1234);
-		;
 
 		connexSList = new ArrayList<ConnexSensor>(nsensors);
 		connexCList = new ArrayList<ConnexCentro>(ncentres);
@@ -631,9 +614,5 @@ public class Estat {
 
 	public boolean[][] getConnexions() {
 		return connexions;
-	}
-
-	public int[][] getRedSensores() {
-		return redSensores;
 	}
 }
