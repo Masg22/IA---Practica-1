@@ -101,7 +101,7 @@ public class Estat {
 				connexCList.get(- this.connectionOut).actCapacity(tranmissionChange);
 			}
 			else { // es otro sensor
-				//connexSList.get(this.connectionOut).recActTransmission(tranmissionChange);
+				connexSList.get(this.connectionOut).recActTransmission(tranmissionChange);
 			}
 		}
 		

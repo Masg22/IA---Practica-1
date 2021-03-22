@@ -49,7 +49,7 @@ public class RedProblem {
             printActions(agent.getActions());
             printInstrumentation(agent.getInstrumentation());
            // System.out.print(((Estat) search.getGoalState()).toString());
-           // System.out.println("\n" + ((Estat) search.getGoalState()).correspondenciasToString());
+           // System.out.println("\n" + ((Estat) search.getGoalState()).sensToString());
         } catch (Exception e) {
             e.printStackTrace();
         }
