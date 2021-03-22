@@ -76,7 +76,7 @@ public class Estat {
 			Double parentCapacity = sensores.get(parentId-1).getCapacidad();
 			Double transmission1 = connexSList.get(sensorId).getTransmission();
 			
-			//this.recActTransmission(transmission1);
+			this.recActTransmission(transmission1);
 
 			if (connectionIn.size() >= MAXINPUTSENSOR) {
 				isFree = false;
@@ -100,8 +100,8 @@ public class Estat {
 			this.transmission += transmission;
 		}
 		
-		public void recActTransmission(Double tranmissionChange){
-			/*this.transmission += tranmissionChange;
+		public void recActTransmission(Double transmissionChange){
+			/*this.transmission += transmissionChange;
 			
 			System.out.println("Transmission:" + transmission);
 			
@@ -110,7 +110,7 @@ public class Estat {
 				connexCList.get(-(this.connectionOut)).actCapacity(transmissionChange);
 			}
 			else { // es otro sensor
-				connexSList.get(this.connectionOut).recActTransmission(tranmissionChange);
+				connexSList.get(this.connectionOut).recActTransmission(transmissionChange);
 			}*/
 			
 			Queue<Integer> q = new LinkedList<Integer>();
@@ -118,10 +118,10 @@ public class Estat {
 			while (! q.isEmpty()) {
 				Integer connex = q.poll();
 				if (connex < 0) { // CENTRE
-					connexCList.get(- connex).actCapacity(tranmissionChange);
+					connexCList.get(- connex).actCapacity(transmissionChange);
 				}
 				else { // SENSOR
-					connexSList.get(connex).addTranmission(tranmissionChange);
+					connexSList.get(connex).addTransmission(transmissionChange);
 					q.add(connexSList.get(connex).getConnectionOut());	
 				}
 			}
@@ -460,12 +460,14 @@ public class Estat {
 		for (int i = 0, is = 1; i < sensorsConnected.length; i++, is++) {
 			if (!sensorsConnected[i]) {
 				for (int j = 0, js = 1; j < sensores.size(); j++, js++) {
-					if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
-							+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
-						connexSList.get(is).setConnectionOut(js);
-						connexSList.get(js).addConnectionIn(js, is);
-						connexions[i][j] = true;
-						sensorsConnected[i] = true;
+					if (!sensorsConnected[i]) {
+						if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
+								+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
+							connexSList.get(is).setConnectionOut(js);
+							connexSList.get(js).addConnectionIn(js, is);
+							connexions[i][j] = true;
+							sensorsConnected[i] = true;
+						}
 					}
 				}
 			}
@@ -545,12 +547,14 @@ public class Estat {
 		for (int i = 0, is = 1; i < sensorsConnected.length; i++, is++) {
 			if (!sensorsConnected[i]) {
 				for (int j = sensores.size() - 1, js = sensores.size(); j >= 0; j--, js--) {
-					if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
-							+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
-						connexSList.get(is).setConnectionOut(js);
-						connexSList.get(js).addConnectionIn(js, is);
-						connexions[i][j] = true;
-						sensorsConnected[i] = true;
+					if (!sensorsConnected[i]) {
+						if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
+								+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
+							connexSList.get(is).setConnectionOut(js);
+							connexSList.get(js).addConnectionIn(js, is);
+							connexions[i][j] = true;
+							sensorsConnected[i] = true;
+						}
 					}
 				}
 			}
@@ -610,7 +614,7 @@ public class Estat {
 		
 
 		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
-			connexSList.get(is).addTranmission(sensores.get(i).getCapacidad());
+			connexSList.get(is).addTransmission(sensores.get(i).getCapacidad());
 		}
 
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
@@ -629,12 +633,14 @@ public class Estat {
 		for (int i = 0, is = 1; i < sensorsConnected.length; i++, is++) {
 			if (!sensorsConnected[i]) {
 				for (int j = 0, js = 1; j < sensores.size(); j++, js++) {
-					if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
-							+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
-						connexSList.get(is).setConnectionOut(js);
-						connexSList.get(js).addConnectionIn(js, is);
-						connexions[i][j] = true;
-						sensorsConnected[i] = true;
+					if (!sensorsConnected[i]) {
+						if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
+								+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
+							connexSList.get(is).setConnectionOut(js);
+							connexSList.get(js).addConnectionIn(js, is);
+							connexions[i][j] = true;
+							sensorsConnected[i] = true;
+						}
 					}
 				}
 			}
