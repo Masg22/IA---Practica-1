@@ -1,0 +1,7 @@
+N	M	nsensors	ncentres	estat_inicial	alpha	beta	gamma	algoritme	operadors	heuristic	k	iter	passos_iter	lambda	temps	nodes_exp	coste_inicial	coste_final
+100	100	100	4	3	3	2	1	HC	1	1					184	1	0.0	0.0
+100	100	100	4	3	3	2	1	HC	1	1					85	1	0.0	0.0
+100	100	100	4	3	3	2	1	HC	1	1					84	1	0.0	0.0
+100	100	100	4	3	3	2	1	HC	1	1					92	1	0.0	0.0
+100	100	100	4	3	3	2	1	HC	1	1					75	1	0.0	0.0
+100	100	100	4	3	3	2	1	HC	1	1					87	1	0.0	0.0

@@ -15,8 +15,7 @@ public class Estat {
 	private static int alfa, beta, gamma;
 	private static int nsensors; // numero de sensors
 	private static int ncentres; // numero de centres
-	private boolean[][] connexions; // la fila i indica les connex del node i
-	private static int redSensores[][]; // indica si hi ha algun node en una coordenada 0: res 1: central 2: sensor.
+	private boolean connexions[][]; // la fila i indica les connex del node i
 
 	static Sensores sensores;
 	static CentrosDatos centros;
@@ -150,7 +149,7 @@ public class Estat {
 		private Double reception; 
 
 		private Double capacity;
-		//M: Hay que Modificar la capacidad cada vez que añadimos un nuevo nodo directamente al centro o lo desconectamos 
+		//M: Hay que Modificar la capacidad cada vez que aï¿½adimos un nuevo nodo directamente al centro o lo desconectamos 
 
 
 		public ConnexCentro() {
@@ -194,7 +193,7 @@ public class Estat {
 		
 		public void actCapacity(Double capacityChange) {
 			
-			// M: comprobamos aqui que si se suma una capacidad y excede el limite de 150 no se pueda ejecutar la operacion ¿?
+			// M: comprobamos aqui que si se suma una capacidad y excede el limite de 150 no se pueda ejecutar la operacion ï¿½?
 			this.reception += capacityChange;
 		}
 
@@ -233,22 +232,8 @@ public class Estat {
 
 	//	connexions = new Boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
 
-		redSensores = new int[N][M]; // La matriu ja esta a 0
-
 		sensores = new Sensores(nsens, sensSeed);
 		centros = new CentrosDatos(ncent, centSeed);
-
-		for (int i = 0; i < centros.size(); i++) {
-			int xc = centros.get(i).getCoordX();
-			int yc = centros.get(i).getCoordY();
-			redSensores[xc][yc] = 1;
-		}
-
-		for (int i = 0; i < sensores.size(); i++) {
-			int xs = sensores.get(i).getCoordX();
-			int ys = sensores.get(i).getCoordY();
-			redSensores[xs][ys] = 2;
-		}
 
 		nsens++;
 
@@ -287,9 +272,7 @@ public class Estat {
 		ncentres = 4;
 
 		sensores = new Sensores(nsensors, 1234);
-		;
 		centros = new CentrosDatos(ncentres, 1234);
-		;
 
 		connexSList = new ArrayList<ConnexSensor>(nsensors);
 		connexCList = new ArrayList<ConnexCentro>(ncentres);
@@ -402,7 +385,7 @@ public class Estat {
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
 
 		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
-			connexSList.get(is).addTranmission(sensores.get(i).getCapacidad()); //M: puede que haya que cambiarlo a recActTranssmission ¿?
+			connexSList.get(is).addTranmission(sensores.get(i).getCapacidad()); //M: puede que haya que cambiarlo a recActTranssmission ï¿½?
 		}
 
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
@@ -540,7 +523,7 @@ public class Estat {
 
 	// * Operators *
 
-	// TODO Una funció recursiva que retorno el sumatori de les transmissions que
+	// TODO Una funciï¿½ recursiva que retorno el sumatori de les transmissions que
 	// penjen de un Sensor sensorId
 
 	// pre el Sensor "sensor" y el sensor i/o centro "newConnex" tienen connexiones
@@ -749,9 +732,5 @@ public class Estat {
 
 	public boolean[][] getConnexions() {
 		return connexions;
-	}
-
-	public int[][] getRedSensores() {
-		return redSensores;
 	}
 }

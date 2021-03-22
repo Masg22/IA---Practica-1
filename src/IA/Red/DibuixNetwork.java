@@ -85,7 +85,7 @@ public class DibuixNetwork extends Dibuix {
 
 	public void dibuixarSensor(int x, int y) {
 		try {
-			setColorPunts(Color.black);
+			setColorPunts(Color.red);
 			int id = dibuixarPunt(x * 10, y * 10);
 			setEtiquetaPunt(id, "" + id);
 		} catch (Exception e) {
@@ -95,7 +95,7 @@ public class DibuixNetwork extends Dibuix {
 
 	public void dibuixarCentre(int x, int y) {
 		try {
-			setColorPunts(new Color(150, 150, 150));
+			setColorPunts(Color.blue);
 			int id = dibuixarPunt(x * 10, y * 10);
 			setEtiquetaPunt(id, "" + id);
 		} catch (Exception e) {

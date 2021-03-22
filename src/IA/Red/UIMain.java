@@ -92,7 +92,7 @@ public class UIMain extends JFrame {
 		jLabel27 = new javax.swing.JLabel();
 		jLabel28 = new javax.swing.JLabel();
 		jLabel29 = new javax.swing.JLabel();
-		maxrepText = new javax.swing.JTextField();
+		maxCentText = new javax.swing.JTextField();
 		alfaText = new javax.swing.JTextField();
 		betaText = new javax.swing.JTextField();
 		gammaText = new javax.swing.JTextField();
@@ -355,13 +355,13 @@ public class UIMain extends JFrame {
 		gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
 		jPanel12.add(jLabel29, gridBagConstraints);
 
-		maxrepText.setColumns(3);
-		maxrepText.setText("20");
+		maxCentText.setColumns(3);
+		maxCentText.setText("4");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 5;
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-		jPanel12.add(maxrepText, gridBagConstraints);
+		jPanel12.add(maxCentText, gridBagConstraints);
 
 		alfaText.setColumns(3);
 		alfaText.setText("3");
@@ -879,8 +879,8 @@ public class UIMain extends JFrame {
 		int alfa = Integer.parseInt(alfaText.getText());
 		int beta = Integer.parseInt(betaText.getText());
 		int gamma = Integer.parseInt(gammaText.getText());
-		int maxrep = Integer.parseInt(maxrepText.getText());
-		estat.actualitzarParametres(alfa, beta, gamma, maxrep);
+		int maxCent = Integer.parseInt(maxCentText.getText());
+		estat.actualitzarParametres(alfa, beta, gamma, maxCent);
 		errorInicialLabel.setText("Error Inicial: " + estat.getCoste());
 	}// GEN-LAST:event_perDefecteParamsActionPerformed
 
@@ -890,8 +890,8 @@ public class UIMain extends JFrame {
 		int alfa = Integer.parseInt(alfaText.getText());
 		int beta = Integer.parseInt(betaText.getText());
 		int gamma = Integer.parseInt(gammaText.getText());
-		int maxrep = Integer.parseInt(maxrepText.getText());
-		estat.actualitzarParametres(alfa, beta, gamma, maxrep);
+		int maxCent = Integer.parseInt(maxCentText.getText());
+		estat.actualitzarParametres(alfa, beta, gamma, maxCent);
 		textErrorInicial();
 	}// GEN-LAST:event_actualitzarParamsButtonActionPerformed
 
@@ -928,7 +928,7 @@ public class UIMain extends JFrame {
 	 */
 	private boolean comprovarParams() {
 		boolean err = false;
-		int m = 0, n = 0, ns = 0, nc = 0, ss = 0, sc = 0, alfa = 0, beta = 0, gamma = 0, maxrep = 0;
+		int m = 0, n = 0, ns = 0, nc = 0, ss = 0, sc = 0, alfa = 0, beta = 0, gamma = 0, maxCent = 0;
 		try {
 			m = Integer.parseInt(mText.getText());
 			n = Integer.parseInt(nText.getText());
@@ -939,8 +939,8 @@ public class UIMain extends JFrame {
 			alfa = Integer.parseInt(alfaText.getText());
 			beta = Integer.parseInt(betaText.getText());
 			gamma = Integer.parseInt(gammaText.getText());
-			maxrep = Integer.parseInt(maxrepText.getText());
-			if (m < 0 || n < 0 || ns < 0 || nc < 0 || alfa < 0 || beta < 0 || gamma < 0 || maxrep < 0)
+			maxCent = Integer.parseInt(maxCentText.getText());
+			if (m < 0 || n < 0 || ns < 0 || nc < 0 || alfa < 0 || beta < 0 || gamma < 0 || maxCent < 0)
 				throw new Exception();
 		} catch (Exception e) {
 			error("S'han d'introduir nombres naturals.");
@@ -958,7 +958,7 @@ public class UIMain extends JFrame {
 		} else if (alfa <= beta || beta <= gamma) {
 			error("Els paràmetres han de complir alfa > beta > gamma");
 			err = true;
-		} else if (maxrep > nc) {
+		} else if (maxCent > nc) {
 			error("El nombre màxim de centres no pot excedir el nombre de centres existents.");
 			err = true;
 		}
@@ -1022,14 +1022,14 @@ public class UIMain extends JFrame {
 		nSensorsText.setText("100");
 		seedSensorsText.setText("1234");
 		nCentresText.setText("4");
-		seedCentresText.setText("1234");
+		seedCentresText.setText("4321");
 	}
 
 	private void valorsPerDefecteParams() {
 		alfaText.setText("3");
 		betaText.setText("2");
 		gammaText.setText("1");
-		maxrepText.setText("20");
+		maxCentText.setText("4");
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1093,7 +1093,7 @@ public class UIMain extends JFrame {
 	private javax.swing.JTextField kText;
 	private javax.swing.JTextField lambdaText;
 	private javax.swing.JTextField mText;
-	private javax.swing.JTextField maxrepText;
+	private javax.swing.JTextField maxCentText;
 	private javax.swing.JTextField nSensorsText;
 	private javax.swing.JTextField nCentresText;
 	private javax.swing.JTextField seedSensorsText;
