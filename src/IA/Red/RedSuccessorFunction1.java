@@ -23,7 +23,7 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 			for (int k = 0; k < estat.sensores.size(); ++k) {
 				Estat newState = new Estat(estat);
 				// tots els sensors posibles
-				if (newState.createConnexionS(i + 1, k + 1)) {
+				if (/*(i != k) &&*/ newState.createConnexionS(i + 1, k + 1)) {
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to sensor" + k + "\n");
 					llistaSucc.add(new Successor(S.toString(), newState));
