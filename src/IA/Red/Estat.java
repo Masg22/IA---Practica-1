@@ -15,7 +15,7 @@ public class Estat {
 	private static int alfa, beta, gamma;
 	private static int nsensors; // numero de sensors
 	private static int ncentres; // numero de centres
-	private boolean connexions[][]; // la fila i indica les connex del node i
+	private boolean[][] connexions; // la fila i indica les connex del node i
 	private static int redSensores[][]; // indica si hi ha algun node en una coordenada 0: res 1: central 2: sensor.
 
 	static Sensores sensores;
@@ -101,7 +101,7 @@ public class Estat {
 				connexCList.get(- this.connectionOut).actCapacity(tranmissionChange);
 			}
 			else { // es otro sensor
-				connexSList.get(this.connectionOut).recActTransmission(tranmissionChange);
+				//connexSList.get(this.connectionOut).recActTransmission(tranmissionChange);
 			}
 		}
 		
@@ -180,7 +180,7 @@ public class Estat {
 
 		public void addConnectionIn(int sensorId) {
 			connectionIn.add(sensorId);
-			this.reception += connexSList.get(connectionIn.get(sensorId)).getTransmission();
+			this.reception += connexSList.get(sensorId).getTransmission();
 			if (connectionIn.size() >= MAXINPUTCENTER || this.reception == 150.0) {
 				isFree = false;
 			}
@@ -188,14 +188,14 @@ public class Estat {
 
 		public void deleteConnexion(int sensorId) {
 			connectionIn.remove(connectionIn.indexOf(sensorId));
-			this.reception -= connexSList.get(connectionIn.get(sensorId)).getTransmission();
+			this.reception -= connexSList.get(sensorId).getTransmission();
 			isFree = true;
 		}
 		
 		public void actCapacity(Double capacityChange) {
 			
 			// M: comprobamos aqui que si se suma una capacidad y excede el limite de 150 no se pueda ejecutar la operacion ¿?
-			this.capacity += capacityChange;
+			this.reception += capacityChange;
 		}
 
 		// GETTERS
@@ -231,7 +231,7 @@ public class Estat {
 		nsensors = nsens;
 		ncentres = ncent;
 
-		connexions = new boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
+	//	connexions = new Boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
 
 		redSensores = new int[N][M]; // La matriu ja esta a 0
 
@@ -334,11 +334,11 @@ public class Estat {
 		sensores = estat.getSensores();
 		centros = estat.getCentros();
 
-		boolean aux[][] = estat.getConnexions();
-		connexions = new boolean[aux.length][aux.length];
-		for (int i = 0; i < nsensors + ncentres; i++)
-			for (int j = 0; j < nsensors + ncentres; j++)
-				connexions[i][j] = aux[i][j];
+		//boolean aux[][] = estat.getConnexions();
+		//connexions = new boolean[aux.length][aux[0].length];
+		//for (int i = 0; i < nsensors + ncentres; i++)
+			//for (int j = 0; j < nsensors + ncentres; j++)
+				//connexions[i][j] = aux[i][j];
 
 		// We have to create a shadow copy of the ArrayList, not just the
 		// reference like "connexSList = estat.getConnexSList();"
@@ -559,11 +559,11 @@ public class Estat {
 				if (oldConnexID < 0) { // Si sensorID estaba conectat a un Centre
 					
 					
-					x1 = sensores.get(sensorID).getCoordX();
-					y1 = sensores.get(sensorID).getCoordY();
+					x1 = sensores.get(sensorID-1).getCoordX();
+					y1 = sensores.get(sensorID-1).getCoordY();
 					
-					x2 = centros.get(-oldConnexID).getCoordX();
-					y2 = centros.get(-oldConnexID).getCoordY();
+					x2 = centros.get((-oldConnexID)-1).getCoordX();
+					y2 = centros.get((-oldConnexID)-1).getCoordY();
 					
 					trans = connexSList.get(sensorID).getTransmission();
 					
@@ -573,11 +573,11 @@ public class Estat {
 					
 					
 				} else { // Si sensorID estaba conectat a un Sensor
-					x1 = sensores.get(sensorID).getCoordX();
-					y1 = sensores.get(sensorID).getCoordY();
+					x1 = sensores.get(sensorID-1).getCoordX();
+					y1 = sensores.get(sensorID-1).getCoordY();
 					
-					x2 = sensores.get(oldConnexID).getCoordX();
-					y2 = sensores.get(oldConnexID).getCoordY();
+					x2 = sensores.get(oldConnexID-1).getCoordX();
+					y2 = sensores.get(oldConnexID-1).getCoordY();
 					
 					trans = connexSList.get(sensorID).getTransmission();
 					
@@ -589,11 +589,11 @@ public class Estat {
 				connexSList.get(sensorID).setConnectionOut(newConnexID);
 				connexCList.get(-newConnexID).addConnectionIn(sensorID);
 				
-				x1 = sensores.get(sensorID).getCoordX();
-				y1 = sensores.get(sensorID).getCoordY();
+				x1 = sensores.get(sensorID-1).getCoordX();
+				y1 = sensores.get(sensorID-1).getCoordY();
 				
-				x2 = centros.get(-newConnexID).getCoordX();
-				y2 = centros.get(-newConnexID).getCoordY();
+				x2 = centros.get((-newConnexID)-1).getCoordX();
+				y2 = centros.get((-newConnexID)-1).getCoordY();
 				
 				trans = connexSList.get(sensorID).getTransmission();
 				
@@ -610,11 +610,11 @@ public class Estat {
 								.getCapacidad() * 3)) {
 					if (oldConnexID < 0) { // Si sensorID estaba conectat a un Centre
 						
-						x1 = sensores.get(sensorID).getCoordX();
-						y1 = sensores.get(sensorID).getCoordY();
+						x1 = sensores.get(sensorID-1).getCoordX();
+						y1 = sensores.get(sensorID-1).getCoordY();
 						
-						x2 = centros.get(-oldConnexID).getCoordX();
-						y2 = centros.get(-oldConnexID).getCoordY();
+						x2 = centros.get((-oldConnexID)-1).getCoordX();
+						y2 = centros.get((-oldConnexID)-1).getCoordY();
 						
 						trans = connexSList.get(sensorID).getTransmission();
 						
@@ -622,11 +622,11 @@ public class Estat {
 						
 						connexCList.get(-oldConnexID).deleteConnexion(sensorID);
 					} else { // Si sensorID estaba conectat a un Sensor
-						x1 = sensores.get(sensorID).getCoordX();
-						y1 = sensores.get(sensorID).getCoordY();
+						x1 = sensores.get(sensorID-1).getCoordX();
+						y1 = sensores.get(sensorID-1).getCoordY();
 						
-						x2 = sensores.get(oldConnexID).getCoordX();
-						y2 = sensores.get(oldConnexID).getCoordY();
+						x2 = sensores.get(oldConnexID-1).getCoordX();
+						y2 = sensores.get(oldConnexID-1).getCoordY();
 						
 						trans = connexSList.get(sensorID).getTransmission();
 						
@@ -639,11 +639,11 @@ public class Estat {
 					connexSList.get(newConnexID).addConnectionIn(newConnexID, sensorID);
 					
 					
-					x1 = sensores.get(sensorID).getCoordX();
-					y1 = sensores.get(sensorID).getCoordY();
+					x1 = sensores.get(sensorID-1).getCoordX();
+					y1 = sensores.get(sensorID-1).getCoordY();
 					
-					x2 = sensores.get(newConnexID).getCoordX();
-					y2 = sensores.get(newConnexID).getCoordY();
+					x2 = sensores.get(newConnexID-1).getCoordX();
+					y2 = sensores.get(newConnexID-1).getCoordY();
 					
 					trans = connexSList.get(sensorID).getTransmission();
 					
