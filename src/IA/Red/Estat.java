@@ -95,8 +95,7 @@ public class Estat {
 			isFree = true;
 		}
 
-		//M: creo que hay que eliminarla -> la he metido dentro de recActTransmission()
-		public void addTransmission(Double transmission) {
+		public void addTranmission(Double tranmission) {
 			this.transmission += transmission;
 		}
 		
