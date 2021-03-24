@@ -435,7 +435,7 @@ public class Estat {
 			for (int j = 0; j < nsensors + ncentres; j++)
 				connexions[i][j] = false;
 		
-		UIMain.modificaNetworkRePaint(this);
+		//UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -522,7 +522,7 @@ public class Estat {
 		System.out.println("SOL2  S:" + sensores.toString());
 		System.out.println("SOL2  C:" + centros.toString());
 		
-		UIMain.modificaNetworkRePaint(this);
+		//UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -607,7 +607,7 @@ public class Estat {
 		System.out.println("SOL3  S:" + sensores.toString());
 		System.out.println("SOL3  C:" + centros.toString());
 		
-		UIMain.modificaNetworkRePaint(this);
+		//UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
