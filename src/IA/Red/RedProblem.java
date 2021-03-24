@@ -65,6 +65,7 @@ public class RedProblem {
 		System.out.println("Salir: 0");
 	}
     private static void printActions(List actions) {
+    	System.out.println("Printing acctions:");
         for (int i = 0; i < actions.size(); i++) {
             String action = (String) actions.get(i);
             System.out.println(action);
