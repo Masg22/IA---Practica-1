@@ -344,6 +344,14 @@ public class Estat {
 		
 		origSensores = new Sensores(nsens, sensSeed);
 		origCentros = new CentrosDatos(ncent, centSeed);
+		
+		nsensors = nsens;
+		ncentres = nsens;
+		
+		connexions = new boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
+		for (int i = 0; i < nsensors + ncentres; i++)
+			for (int j = 0; j < nsensors + ncentres; j++)
+				connexions[i][j] = false;
 
 		// We add +1 to the number of sensors because we will use positive numbers for
 		// the Sensor ID, and
@@ -518,6 +526,7 @@ public class Estat {
 			}
 		});
 		
+		
 		System.out.println("SOL2  S:" + sensores.toString());
 		System.out.println("SOL2  C:" + centros.toString());
 		
@@ -603,8 +612,29 @@ public class Estat {
 			}
 		});
 		
+		System.out.println("SOL2  S:" + nsensors);
+		
+		System.out.println("SOL3  S size:" + connexSList.size());
+		System.out.println("SOL3  SCON:" + connexSList.toString());
+		
 		System.out.println("SOL3  S:" + sensores.toString());
+		/*
+		for(int i = 0; i < sensores.size(); i++ ) {
+			System.out.println("SOL3  S:" + sensores.get(i).toString());
+		}
+		*/
+		
+		System.out.println("SOL2  C:" + ncentres);
+		
+		System.out.println("SOL3  C size:" + connexCList.size());
+		System.out.println("SOL3  CCON:" + connexCList.toString());
+		
 		System.out.println("SOL3  C:" + centros.toString());
+		/*
+		for(int i = 0; i < centros.size(); i++ ) {
+			System.out.println("SOL3  S:" + centros.get(i).toString());
+		}
+		*/
 		
 		//UIMain.modificaNetworkRePaint(this);
 
