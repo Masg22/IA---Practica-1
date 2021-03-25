@@ -52,8 +52,8 @@ public class RedProblem {
 
             printActions(agent.getActions());
             printInstrumentation(agent.getInstrumentation());
-           // System.out.print(((Estat) search.getGoalState()).toString());
-           // System.out.println("\n" + ((Estat) search.getGoalState()).sensToString());
+            System.out.print(((Estat) search.getGoalState()).toString());
+            System.out.println("\n" + ((Estat) search.getGoalState()).connexionesToString());
         } catch (Exception e) {
             e.printStackTrace();
         }

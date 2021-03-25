@@ -10,13 +10,15 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 	public List getSuccessors(Object actualState) {
 		ArrayList<Successor> llistaSucc = new ArrayList<>();
 		Estat estat = (Estat) actualState;
-		
+		//System.out.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" );
+
 		for (int i = 0; i < estat.sensores.size(); ++i) {
 			
 			for (int j = 0; j < estat.centros.size(); ++j) {
 				Estat newState = new Estat(estat);
 				
 				// tots els centres posibles
+				//System.out.println("BURRO" + j);
 				if (newState.createConnexionS(i + 1, -(j) - 1)) {
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to center" + j + "\n");
@@ -27,7 +29,8 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 				Estat newState = new Estat(estat);
 				
 				// tots els sensors posibles
-				if (/*(i != k) &&*/ newState.createConnexionS(i + 1, k + 1)) {
+				//System.out.println("KOALA" + k);
+				if ( newState.createConnexionS(i + 1, k + 1)) {
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to sensor" + k + "\n");
 					llistaSucc.add(new Successor(S.toString(), newState));
