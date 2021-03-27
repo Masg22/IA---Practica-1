@@ -46,14 +46,20 @@ public class RedProblem {
 	}
     private static void HillClimbingSearch(Estat estat) {
         try {
+        	long TInicio = System.currentTimeMillis();
             Problem problem =  new Problem(estat, new RedSuccessorFunction1(), new RedGoalTest(), new RedHeuristicFunction1());
             Search search = new HillClimbingSearch();
             SearchAgent agent = new SearchAgent(problem, search);
 
             printActions(agent.getActions());
             printInstrumentation(agent.getInstrumentation());
-            System.out.print(((Estat) search.getGoalState()).toString());
+            System.out.println(((Estat) search.getGoalState()).toString());
             System.out.println("\n" + ((Estat) search.getGoalState()).connexionesToString());
+            System.out.println("COSTE FINAL " + ((Estat) search.getGoalState()).getCoste()+"\n");
+            System.out.println("MEJORA DE COSTE " + (estat.getCoste() - ((Estat) search.getGoalState()).getCoste())+"\n");
+            
+            System.out.println("Tiempo de ejecución: " + (System.currentTimeMillis()-TInicio) +"ms" );
+
         } catch (Exception e) {
             e.printStackTrace();
         }

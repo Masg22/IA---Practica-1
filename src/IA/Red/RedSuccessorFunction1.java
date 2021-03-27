@@ -7,6 +7,7 @@ import aima.search.framework.SuccessorFunction;
 
 public class RedSuccessorFunction1 implements SuccessorFunction {
 
+	@Override
 	public List getSuccessors(Object actualState) {
 		ArrayList<Successor> llistaSucc = new ArrayList<>();
 		Estat estat = (Estat) actualState;
@@ -15,29 +16,31 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 		for (int i = 0; i < estat.sensores.size(); ++i) {
 			
 			for (int j = 0; j < estat.centros.size(); ++j) {
-				Estat newState = new Estat(estat);
-				
+				Estat nou = new Estat(estat);
+				System.out.println("ESTOY EN RED SUCCESSSORS centro " + nou.connexionesToString());
+
 				// tots els centres posibles
 				//System.out.println("BURRO" + j);
-				if (newState.createConnexionS(i + 1, -(j) - 1)) {
+				if (nou.createConnexionS(i + 1, -(j) - 1)) {
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to center" + j + "\n");
-					llistaSucc.add(new Successor(S.toString(), newState));
+					llistaSucc.add(new Successor(S.toString(), nou));
 				}
 			}
 			for (int k = 0; k < estat.sensores.size(); ++k) {
-				Estat newState = new Estat(estat);
-				
+				Estat nou = new Estat(estat);
+				System.out.println("ESTOY EN RED SUCCESSSORS sensor " + nou.connexionesToString());
 				// tots els sensors posibles
 				//System.out.println("KOALA" + k);
-				if ( newState.createConnexionS(i + 1, k + 1)) {
+				if ( nou.createConnexionS(i + 1, k + 1)) {
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to sensor" + k + "\n");
-					llistaSucc.add(new Successor(S.toString(), newState));
+					llistaSucc.add(new Successor(S.toString(), nou));
 				}
 			}
 		}
 		
+		System.out.println("COJO MEJOR HEURISTICO" + "\n");
 		return llistaSucc;
 	}
 }
