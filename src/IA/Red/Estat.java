@@ -97,7 +97,7 @@ public class Estat {
 		}
 
 		public void addTransmission(Double tranmission,int id) {
-			if(this.transmission + transmission < sensores.get(id-1).getCapacidad()*3)this.transmission += transmission;
+			if(this.transmission + transmission <= sensores.get(id-1).getCapacidad()*3)this.transmission += transmission;
 			if(this.transmission < 0) this.transmission = 0.0;
 		}
 		
