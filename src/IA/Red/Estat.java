@@ -74,9 +74,12 @@ public class Estat {
 			connectionIn.add(sensorId);
 
 			Double parentCapacity = sensores.get(parentId-1).getCapacidad();
-			Double transmission1 = connexSList.get(sensorId).getTransmission();
+			Double transmissionParent = connexSList.get(parentId).getTransmission();
+			Double transmissionChild = connexSList.get(sensorId).getTransmission();
 			
-			this.recActTransmission(transmission1, parentId);
+			
+			this.setTransmission(transmissionParent + transmissionChild);
+			this.recActTransmission(transmissionChild, parentId);
 
 			if (connectionIn.size() >= MAXINPUTSENSOR) {
 				isFree = false;
@@ -90,15 +93,21 @@ public class Estat {
 			connectionIn.remove(connectionIn.indexOf(sensorId));
 
 			Double transmission1 = connexSList.get(sensorId).getTransmission();
+			Double transmission2 = this.getTransmission()-transmission1;
 			
+			System.out.println("Eliminando conexion ");
+			
+			this.setTransmission(transmission2);
 			this.recActTransmission(-transmission1,actual);
 
 			isFree = true;
 		}
 
 		public void addTransmission(Double tranmission,int id) {
-			if(this.transmission + transmission <= sensores.get(id-1).getCapacidad()*3)this.transmission += transmission;
-			if(this.transmission < 0) this.transmission = 0.0;
+			if(this.transmission + transmission <= sensores.get(id-1).getCapacidad()*3) {
+				this.setTransmission(this.getTransmission()+transmission);
+				if(this.transmission < 0) this.transmission = 0.0;
+			}
 		}
 		
 		public void recActTransmission(Double transmissionChange, int actual){
@@ -159,6 +168,31 @@ public class Estat {
 					q.add(connexSList.get(connex).getConnectionOut());
 				}
 			}
+			return false;
+		}
+		
+		public Boolean checkPropagation(Double trans, int sensorID) {
+			
+			Queue<Integer> q = new LinkedList<Integer>();
+			q.add(this.connectionOut);
+			int it = 0;
+			//System.out.println("SOY" + actual + it);
+			while (! q.isEmpty()) {
+				++it;
+				Integer connex = q.poll();
+				//System.out.println("ESTOY EN" + connex + it);
+				if (connex < 0) { // CENTRE
+					return connexCList.get(- connex).checkPropagationC(trans, connex);
+				}
+				else { // SENSOR
+					//connexSList.get(connex).addTransmission(transmissionChange, connex);
+					if (connexSList.get(connex).getTransmission() + trans > sensores.get(connex -1).getCapacidad() * 3) return false;
+					q.add(connexSList.get(connex).getConnectionOut());	
+					//System.out.println("VOY A" + connexSList.get(connex).getConnectionOut() );
+
+				}
+			}
+			
 			return false;
 		}
 		
@@ -253,6 +287,10 @@ public class Estat {
 			// M: comprobamos aqui que si se suma una capacidad y excede el limite de 150 no se pueda ejecutar la operacion �?
 			this.reception += capacityChange;
 			if(this.reception < 0) this.reception = 0.0;
+		}
+		
+		public Boolean checkPropagationC(Double trans, int centerID) {
+			return (connexCList.get(-centerID).getRecepction() + trans <= 150);
 		}
 
 		// GETTERS
@@ -778,11 +816,13 @@ public class Estat {
 		/*System.out.println("ANTIGA CONNEX: " + oldConnexID);
 		System.out.println("NOVA CONNEX: " + newConnexID);
 		System.out.println("SOC CONNEX: " + sensorID);
-*/
+		*/
 		
 		if(newConnexID == sensorID || oldConnexID == newConnexID) return false;
 		
 		if(newConnexID > 0 && !(connexSList.get(newConnexID).checkExit(sensorID))) return false;
+		
+		if(newConnexID > 0 && !connexSList.get(newConnexID).checkPropagation(connexSList.get(sensorID).getTransmission(), newConnexID)) return false;
 
 		if (newConnexID < 0) { // Si la nova Conexio es a un Centre
 			if (connexCList.get(-newConnexID).getIsFree() && connexSList.get(sensorID).getTransmission() + connexCList.get(-newConnexID).getRecepction() <= 150.0 ) {
@@ -1030,7 +1070,7 @@ public class Estat {
 		StringBuffer res = new StringBuffer();
 		res.append("CONNEXIONES\n");
 		for(int i = 1; i < connexSList.size(); ++i) {
-			res.append("Sensor" + (i-1) + ", con transmision, " +connexSList.get(i).getTransmission()+" : ");
+			res.append("Sensor" + (i-1) + ", con cap: "+ sensores.get(i-1).getCapacidad() +", con transmision: " + connexSList.get(i).getTransmission()+" , ");
 			int out = connexSList.get(i).getConnectionOut();
 			if(out < 0) res.append("Connectat a " +(out)+"\n");
 			else res.append("Connectat a " +(out-1)+"\n");
