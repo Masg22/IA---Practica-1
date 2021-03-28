@@ -71,7 +71,6 @@ public class Estat {
 		}
 
 		public Boolean addConnectionIn(int parentId, int sensorId) {
-			connectionIn.add(sensorId);
 
 			Double parentCapacity = sensores.get(parentId-1).getCapacidad();
 			Double transmissionParent = connexSList.get(parentId).getTransmission();
@@ -80,7 +79,12 @@ public class Estat {
 			
 			this.setTransmission(transmissionParent + transmissionChild);
 			Boolean ret = this.recActTransmission(transmissionChild, parentId);
-			if(!ret)this.setTransmission(transmissionParent);
+			if(!ret) {
+				this.setTransmission(transmissionParent);
+			}
+			else {
+				connectionIn.add(sensorId);
+			}
 
 			if (connectionIn.size() >= MAXINPUTSENSOR) {
 				isFree = false;
@@ -91,18 +95,24 @@ public class Estat {
 		}
 
 		public void deleteConnexion(int sensorId, int actual) {
+			//Elimina sensorId de actual
+			
 			//System.out.println("SIZE IN" + connectionIn.size());
 			connectionIn.remove(connectionIn.indexOf(sensorId));
 
 			Double transmission1 = connexSList.get(sensorId).getTransmission();
 			Double transmission2 = this.getTransmission()-transmission1;
 			
-			System.out.println("Eliminando conexion ");
+			//System.out.println("Eliminando conexion ");
 			
 			this.setTransmission(transmission2);
-			this.recActTransmission(-transmission1,sensorId);
-
-			isFree = true;
+			Boolean aux = this.recActTransmission(-transmission1, actual);
+			if (aux) isFree = true;
+			else {
+				System.out.println("#################################################################");
+				this.setTransmission(transmission2+transmission1);
+				connectionIn.add(sensorId);
+			}
 		}
 
 		public Boolean addTransmission(Double tranmission,int id) {
@@ -144,7 +154,7 @@ public class Estat {
 						Integer del = 0;
 						while(connex != del ) {
 							del = q1.poll();
-							Boolean aux2 = connexSList.get(connex).addTransmission(-transmissionChange, del);
+							Boolean aux2 = connexSList.get(del).addTransmission(-transmissionChange, del);
 						}
 						return false;
 					}
@@ -155,8 +165,7 @@ public class Estat {
 			}
 			//System.out.println(this.transmission + "\n");
 			if(this.transmission < 0) this.transmission = 0.0;
-			return true;
-		
+			return false;
 		}
 		
 		public Boolean checkExit(Integer sensorReplaced) {
@@ -952,7 +961,7 @@ public class Estat {
 							
 							x2 = sensores.get(oldConnexID-1).getCoordX();
 							y2 = sensores.get(oldConnexID-1).getCoordY();
-							connexSList.get(oldConnexID).addConnectionIn(sensorID, oldConnexID);	
+							connexSList.get(oldConnexID).addConnectionIn(oldConnexID, sensorID);	
 							trans = connexSList.get(sensorID).getTransmission();
 							
 							sumCost(x1,y1,x2,y2,trans);
