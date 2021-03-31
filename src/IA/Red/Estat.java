@@ -823,11 +823,11 @@ public class Estat {
 		System.out.println("SOC CONNEX: " + sensorID);
 		*/
 		
-		if(newConnexID == sensorID || oldConnexID == newConnexID) return false;
+		//if(newConnexID == sensorID || oldConnexID == newConnexID) return false;
 		
 		//if(newConnexID > 0 && !(connexSList.get(newConnexID).checkExit(sensorID))) return false;
 		
-		if(newConnexID > 0 && !connexSList.get(newConnexID).checkPropagation(connexSList.get(sensorID).getTransmission(), newConnexID)) return false;
+		//if(newConnexID > 0 && !connexSList.get(newConnexID).checkPropagation(connexSList.get(sensorID).getTransmission(), newConnexID)) return false;
 
 		if (newConnexID < 0) { // Si la nova Conexio es a un Centre
 			if (connexCList.get(-newConnexID).getIsFree() && connexSList.get(sensorID).getTransmission() + connexCList.get(-newConnexID).getRecepction() <= 150.0 ) {
