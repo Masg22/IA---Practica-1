@@ -17,7 +17,7 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 			
 			for (int j = 0; j < estat.centros.size(); ++j) {
 				Estat nou = new Estat(estat);
-				System.out.println("ESTOY EN RED SUCCESSSORS centro " + nou.connexionesToString());
+				//System.out.println("ESTOY EN RED SUCCESSSORS centro " + nou.connexionesToString());
 
 				// tots els centres posibles
 				//System.out.println("BURRO" + j);
@@ -29,7 +29,7 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 			}
 			for (int k = 0; k < estat.sensores.size(); ++k) {
 				Estat nou = new Estat(estat);
-				System.out.println("ESTOY EN RED SUCCESSSORS sensor " + nou.connexionesToString());
+				//System.out.println("ESTOY EN RED SUCCESSSORS sensor " + nou.connexionesToString());
 				// tots els sensors posibles
 				//System.out.println("KOALA" + k);
 				if ( nou.createConnexionS(i + 1, k + 1)) {
@@ -40,7 +40,7 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 			}
 		}
 		
-		System.out.println("COJO MEJOR HEURISTICO" + "\n");
+		//System.out.println("COJO MEJOR HEURISTICO" + "\n");
 		return llistaSucc;
 	}
 }
