@@ -165,11 +165,15 @@ public class Estat {
 						Boolean aux = connexSList.get(connex).addTransmission(transmissionChange, connex);
 						if(!aux) {
 							Queue<Integer> q1 = new LinkedList<Integer>();
-							q1.add(this.connectionOut);
+							q1.add(connexSList.get(actual).getConnectionOut());
 							Integer del = 0;
-							while(connex != del ) {
+							while(!q1.isEmpty() ) {
 								del = q1.poll();
-								Boolean aux2 = connexSList.get(del).addTransmission(-transmissionChange, del);
+								if(connex != del) {
+									Boolean aux2 = connexSList.get(del).addTransmission(-transmissionChange, del);
+									q1.add(connexSList.get(del).getConnectionOut());
+								}
+								
 							}
 							return false;
 						}
