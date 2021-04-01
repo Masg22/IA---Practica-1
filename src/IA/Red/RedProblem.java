@@ -35,11 +35,7 @@ public class RedProblem {
 				Integer ncent = in.nextInt();
 				
 				Estat estat = new Estat(nsens, sseed, ncent, cseed);
-<<<<<<< Updated upstream
 				estat.solucioInicial1();
-=======
-				estat.solucioInicial2();
->>>>>>> Stashed changes
 				HillClimbingSearch(estat);
 			}
 			else if(opcion == 2) {

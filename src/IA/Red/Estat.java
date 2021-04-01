@@ -923,7 +923,7 @@ public class Estat {
 					
 						Boolean aux = connexSList.get(oldConnexID).deleteConnexion(sensorID, oldConnexID);
 						if(!aux) {
-							eraseCost(x1,y1,x2,y2,trans);
+							//eraseCost(x1,y1,x2,y2,trans);
 							return false;
 						}
 						
