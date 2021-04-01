@@ -794,6 +794,7 @@ public class UIMain extends JFrame {
 			cerca.fitxerResultats(estat, info_einicial, info_algoritme, info_operadors, info_heuristic, info_k,
 					info_iter, info_passos_iter, info_lambda);
 			dibuixNetworkHC.novaNetwork(cerca.getEstatFinal());
+			cerca.getEstatFinal().finalUI();
 			dibuixNetworkHC.actualitzar();
 		} catch (Exception e) {
 			error(e.toString());

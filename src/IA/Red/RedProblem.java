@@ -35,11 +35,27 @@ public class RedProblem {
 				Integer ncent = in.nextInt();
 				
 				Estat estat = new Estat(nsens, sseed, ncent, cseed);
-				estat.solucioInicial1();
+				estat.solucioInicial3();
 				HillClimbingSearch(estat);
 			}
 			else if(opcion == 2) {
+				System.out.println("Sensors Seed or -1 for a random one");
+				Integer sseed = in.nextInt();
+				if(sseed < 0) sseed = random.nextInt();
 				
+				System.out.println("Number of sensors");
+				Integer nsens = in.nextInt();
+				
+				System.out.println("Centers Seed or -1 for a random one");
+				Integer cseed = in.nextInt();
+				if(cseed < 0) cseed = random.nextInt();
+				
+				System.out.println("Number of centers");
+				Integer ncent = in.nextInt();
+				
+				Estat estat = new Estat(nsens, sseed, ncent, cseed);
+				estat.solucioInicial3();
+				SimulatedAnnealingSearch(estat);
 			}
 		}
 		
@@ -53,6 +69,27 @@ public class RedProblem {
 
             printActions(agent.getActions());
             printInstrumentation(agent.getInstrumentation());
+            System.out.println(((Estat) search.getGoalState()).toString());
+            System.out.println("\n" + ((Estat) search.getGoalState()).connexionesToString());
+            System.out.println("COSTE FINAL " + ((Estat) search.getGoalState()).getCoste()+"\n");
+            System.out.println("MEJORA DE COSTE " + (estat.getCoste() - ((Estat) search.getGoalState()).getCoste())+"\n");
+            
+            System.out.println("Tiempo de ejecución: " + (System.currentTimeMillis()-TInicio) +"ms" );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+   private static void SimulatedAnnealingSearch(Estat estat) {
+        try {
+        	long TInicio = System.currentTimeMillis();
+            Problem problem =  new Problem(estat, new RedSuccessorFunction1(), new RedGoalTest(), new RedHeuristicFunction1());
+            Search search = new SimulatedAnnealingSearch(10000, 100, 10, 0.5);
+            SearchAgent agent = new SearchAgent(problem, search);
+
+           // printActions(agent.getActions());
+           // printInstrumentation(agent.getInstrumentation());
             System.out.println(((Estat) search.getGoalState()).toString());
             System.out.println("\n" + ((Estat) search.getGoalState()).connexionesToString());
             System.out.println("COSTE FINAL " + ((Estat) search.getGoalState()).getCoste()+"\n");

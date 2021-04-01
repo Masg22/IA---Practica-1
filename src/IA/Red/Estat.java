@@ -633,7 +633,7 @@ public class Estat {
 	//	System.out.println("SOL2  S:" + sensores.toString());
 	//	System.out.println("SOL2  C:" + centros.toString());
 		
-		//UIMain.modificaNetworkRePaint(this);
+	//	UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -716,7 +716,7 @@ public class Estat {
 		});
 
 		
-		//UIMain.modificaNetworkRePaint(this);
+	//	UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -1108,5 +1108,20 @@ public class Estat {
 				else res.append("Connectat a " +(out-1)+"\n");
 			}
 			return res.toString();
+		}
+		
+		public void finalUI() {
+
+			connexions = new boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
+			for (int i = 0; i < nsensors + ncentres; i++)
+				for (int j = 0; j < nsensors + ncentres; j++)
+					connexions[i][j] = false;
+			for(int i = 1; i < connexSList.size(); ++i) {
+				int out = connexSList.get(i).getConnectionOut();
+				if(out < 0) {
+					connexions[i-1][sensores.size()+(-out-1)] = true;
+				}
+				else connexions[i-1][out-1] = true;
+			}
 		}
 }
