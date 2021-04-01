@@ -786,7 +786,7 @@ public class Estat {
 	public void eraseCost(int x1, int y1, int x2, int y2, Double trans) {
 	//	System.out.println("---------------" + "\n");
 	//	System.out.println("COSTE" + coste + "\n");
-		coste -= Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * (LAMBDA * trans);
+		coste -= Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * (trans);
 	
 	//	System.out.println("Transmission added" + trans + "\n");
 	//	System.out.println("Distance added" + Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) + "\n");
@@ -799,7 +799,7 @@ public class Estat {
 	//	System.out.println("++++++++++++++++++++" + "\n");
 		//System.out.println("COSTE" + coste + "\n");
 
-		coste +=  Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * (LAMBDA * trans);
+		coste +=  Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * (trans);
 		
 		//System.out.println("Transmission added" + trans + "\n");
 	//	System.out.println("Distance added" + Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) + "\n");
