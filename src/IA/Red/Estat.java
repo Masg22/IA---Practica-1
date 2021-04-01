@@ -487,6 +487,7 @@ public class Estat {
 		}
 	}
 
+	// 
 	public void solucioInicial1() {
 		coste = 0.0;
 		
@@ -496,7 +497,7 @@ public class Estat {
 		sensores.addAll(origSensores);
 		centros.addAll(origCentros);
 		
-	//	System.out.println("SOL1  S:" + sensores.toString());
+		//System.out.println("SOL1  S:" + sensores.toString());
 		//System.out.println("SOL1  C:" + centros.toString());
 		
 		connexSList.clear();
@@ -515,14 +516,38 @@ public class Estat {
 		for (int i = 0; i < nsensors + ncentres; i++)
 			for (int j = 0; j < nsensors + ncentres; j++)
 				connexions[i][j] = false;
+		/*
+		Collections.sort(sensores, new Comparator<Sensor>() {
+			@Override
+			public int compare(Sensor s1, Sensor s2) {
+				// We sort the sensors with the distance from the 0,0 coordinate
+				Integer distS1 = (s1.getCoordX() * s1.getCoordX()) + (s1.getCoordY() * s1.getCoordY());
+				Integer distS2 = (s2.getCoordX() * s2.getCoordX()) + (s2.getCoordY() * s2.getCoordY());
+
+				return (distS2.compareTo(distS1));
+			}
+		});
+
+		Collections.sort(centros, new Comparator<Centro>() {
+			@Override
+			public int compare(Centro c1, Centro c2) {
+				// We sort the centers with the distance from the 0,0 coordinate
+				Integer distC1 = (c1.getCoordX() * c1.getCoordX()) + (c1.getCoordY() * c1.getCoordY());
+				Integer distC2 = (c2.getCoordX() * c2.getCoordX()) + (c2.getCoordY() * c2.getCoordY());
+
+				return (distC2.compareTo(distC1));
+			}
+		});
+		*/
 		
 		//UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
+		
 
 		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
-			connexSList.get(is).addTransmission(sensores.get(i).getCapacidad(), i+1);
+			connexSList.get(is).setTransmission(sensores.get(i).getCapacidad());
 		}
 
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
@@ -553,9 +578,9 @@ public class Estat {
 				}
 			}
 		}
-
+		//System.out.println("\n" + "SOL INICIAL: " + "\n");
+		//System.out.println("\n" + connexionesToString());
 		calcularCoste();
-
 	}
 
 	public void solucioInicial2() {
@@ -610,7 +635,7 @@ public class Estat {
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
 
 		for (int i = 0, is = 1; i < sensores.size(); i++, is++) {
-			connexSList.get(is).addTransmission(sensores.get(i).getCapacidad(), i+1);
+			connexSList.get(is).setTransmission(sensores.get(i).getCapacidad());
 		}
 
 		for (int j = 0, jc = 1; j < centros.size(); j++, jc++) {
@@ -664,7 +689,7 @@ public class Estat {
 			for (int j = 0; j < nsensors + ncentres; j++)
 				connexions[i][j] = false;
 		
-		/*Collections.sort(sensores, new Comparator<Sensor>() {
+		Collections.sort(sensores, new Comparator<Sensor>() {
 			@Override
 			public int compare(Sensor s1, Sensor s2) {
 				// We sort the sensors with the distance from the 0,0 coordinate
@@ -684,31 +709,8 @@ public class Estat {
 
 				return (distC2.compareTo(distC1));
 			}
-		});*/
-		
-		/*System.out.println("SOL2  S:" + nsensors);
-		
-		System.out.println("SOL3  S size:" + connexSList.size());
-		System.out.println("SOL3  SCON:" + connexSList.toString());
-		
-		System.out.println("SOL3  S:" + sensores.toString());
-		/*
-		for(int i = 0; i < sensores.size(); i++ ) {
-			System.out.println("SOL3  S:" + sensores.get(i).toString());
-		}
-		*/
-		/*
-		System.out.println("SOL2  C:" + ncentres);
-		
-		System.out.println("SOL3  C size:" + connexCList.size());
-		System.out.println("SOL3  CCON:" + connexCList.toString());
-		
-		System.out.println("SOL3  C:" + centros.toString());
-		/*
-		for(int i = 0; i < centros.size(); i++ ) {
-			System.out.println("SOL3  S:" + centros.get(i).toString());
-		}
-		*/
+		});
+
 		
 		//UIMain.modificaNetworkRePaint(this);
 
