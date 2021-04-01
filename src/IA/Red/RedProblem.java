@@ -35,7 +35,7 @@ public class RedProblem {
 				Integer ncent = in.nextInt();
 				
 				Estat estat = new Estat(nsens, sseed, ncent, cseed);
-				estat.solucioInicial3();
+				estat.solucioInicial1();
 				HillClimbingSearch(estat);
 			}
 			else if(opcion == 2) {

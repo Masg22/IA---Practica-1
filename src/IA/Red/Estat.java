@@ -110,6 +110,10 @@ public class Estat {
 			public Boolean deleteConnexion(int sensorId, int actual) {
 				//Elimina sensorId de actual
 				
+				if(this.getConnectionIn().size() == 0) {
+					return false;
+				}
+				
 				connectionIn.remove(connectionIn.indexOf(sensorId));
 
 				Double transmission1 = connexSList.get(sensorId).getTransmission();
@@ -916,9 +920,13 @@ public class Estat {
 						y2 = sensores.get(oldConnexID-1).getCoordY();
 						
 						trans = connexSList.get(sensorID).getTransmission();
-						
+					
 						Boolean aux = connexSList.get(oldConnexID).deleteConnexion(sensorID, oldConnexID);
-						if(!aux) return false;
+						if(!aux) {
+							eraseCost(x1,y1,x2,y2,trans);
+							return false;
+						}
+						
 						eraseCost(x1,y1,x2,y2,trans);
 						//System.out.println("COST despres erase" + coste + "\n");
 						
