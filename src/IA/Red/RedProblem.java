@@ -74,7 +74,7 @@ public class RedProblem {
             System.out.println("COSTE FINAL " + ((Estat) search.getGoalState()).getCoste()+"\n");
             System.out.println("MEJORA DE COSTE " + (estat.getCoste() - ((Estat) search.getGoalState()).getCoste())+"\n");
             
-            System.out.println("Tiempo de ejecución: " + (System.currentTimeMillis()-TInicio) +"ms" );
+            System.out.println("Tiempo de ejecuciï¿½n: " + (System.currentTimeMillis()-TInicio) +"ms" );
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,7 +95,7 @@ public class RedProblem {
             System.out.println("COSTE FINAL " + ((Estat) search.getGoalState()).getCoste()+"\n");
             System.out.println("MEJORA DE COSTE " + (estat.getCoste() - ((Estat) search.getGoalState()).getCoste())+"\n");
             
-            System.out.println("Tiempo de ejecución: " + (System.currentTimeMillis()-TInicio) +"ms" );
+            System.out.println("Tiempo de ejecuciï¿½n: " + (System.currentTimeMillis()-TInicio) +"ms" );
 
         } catch (Exception e) {
             e.printStackTrace();
