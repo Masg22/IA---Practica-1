@@ -18,6 +18,7 @@ public class Estat {
 
 	final static int MAXINPUTSENSOR = 3;
 	final static int MAXINPUTCENTER = 25;
+	final static Double LAMBDA = (double) 1;
 
 	private static int N;//UI
 	private static int M;//UI
@@ -773,17 +774,19 @@ public class Estat {
 					x2 = sensores.get(idOut - 1).getCoordX();
 					y2 = sensores.get(idOut - 1).getCoordY();
 				}
-				coste += Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * transmission;
+				Double dist2 = Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2);
+				coste +=  dist2 * (LAMBDA * transmission);
+				//System.out.println("COSTE" + dist2 + "\n");
+
 			}
 		}
 		
-		//System.out.println("COSTE" + coste + "\n");
 	}
 
 	public void eraseCost(int x1, int y1, int x2, int y2, Double trans) {
 	//	System.out.println("---------------" + "\n");
 	//	System.out.println("COSTE" + coste + "\n");
-		coste -= Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * trans;
+		coste -= Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * (LAMBDA * trans);
 	
 	//	System.out.println("Transmission added" + trans + "\n");
 	//	System.out.println("Distance added" + Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) + "\n");
@@ -796,7 +799,7 @@ public class Estat {
 	//	System.out.println("++++++++++++++++++++" + "\n");
 		//System.out.println("COSTE" + coste + "\n");
 
-		coste +=  Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * trans;
+		coste +=  Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * (LAMBDA * trans);
 		
 		//System.out.println("Transmission added" + trans + "\n");
 	//	System.out.println("Distance added" + Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) + "\n");
