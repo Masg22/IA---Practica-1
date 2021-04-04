@@ -20,6 +20,7 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 
 				// tots els centres posibles
 				if (nou.createConnexionS(i + 1, -(j) - 1)) {
+					//System.out.println("ESTOY EN RED SUCCESSSORS centro 2" + nou.connexionesToString());
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to center" + j + "\n");
 					llistaSucc.add(new Successor(S.toString(), nou));

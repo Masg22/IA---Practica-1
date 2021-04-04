@@ -49,7 +49,7 @@ public class UIMain extends JFrame {
 				Integer.parseInt(nSensorsText.getText()), Integer.parseInt(seedSensorsText.getText()),
 				Integer.parseInt(nCentresText.getText()), Integer.parseInt(seedCentresText.getText()));
 		dibuixNetwork1.novaNetwork(estat);
-		errorInicialLabel.setText("Error Inicial: " + estat.getCoste());
+		errorInicialLabel.setText("Coste Inicial: " + estat.getCoste());
 
 	}
 
@@ -309,7 +309,7 @@ public class UIMain extends JFrame {
 		gridBagConstraints.insets = new java.awt.Insets(10, 0, 10, 0);
 		jPanel6.add(estatInicialButton, gridBagConstraints);
 
-		errorInicialLabel.setText("Error Inicial: 0");
+		errorInicialLabel.setText("Coste Inicial: 0");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 3;
@@ -528,7 +528,7 @@ public class UIMain extends JFrame {
 		});
 		jPanel2.add(hillClimbingButton1, new java.awt.GridBagConstraints());
 
-		errorInicialLabel1.setText("Error Inicial: 0");
+		errorInicialLabel1.setText("Coste Inicial: 0");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
@@ -586,7 +586,7 @@ public class UIMain extends JFrame {
 		gridBagConstraints.gridy = 0;
 		jPanel3.add(simulatedAnButton1, gridBagConstraints);
 
-		errorInicialLabel2.setText("Error Inicial: 0");
+		errorInicialLabel2.setText("Coste Inicial: 0");
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 1;
@@ -683,7 +683,7 @@ public class UIMain extends JFrame {
 			cerca = new RedCercador(estat, operadors, heuristic, it, pit, k, lbd);
 			cerca.executarCerca();
 			infoSA.setText("");
-			infoSA.setText("Error Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
+			infoSA.setText("Coste Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
 					+ cerca.getAccions());
 			cerca.fitxerResultats(estat, info_einicial, info_algoritme, info_operadors, info_heuristic, info_k,
 					info_iter, info_passos_iter, info_lambda);
@@ -709,7 +709,7 @@ public class UIMain extends JFrame {
 			cerca = new RedCercador(estat, operadors, heuristic);
 			cerca.executarCerca();
 			infoHC.setText("");
-			infoHC.setText("Error Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
+			infoHC.setText("Coste Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
 					+ cerca.getAccions());
 			cerca.fitxerResultats(estat, info_einicial, info_algoritme, info_operadors, info_heuristic, info_k,
 					info_iter, info_passos_iter, info_lambda);
@@ -739,23 +739,6 @@ public class UIMain extends JFrame {
 			operadors = new RedSuccessorFunction1();
 			operadorsInfo.setText("Modificar Sensor Output Connexion");
 			break;
-		/*
-		 * case 1: operadors = new RedSuccessorFunction2(); operadorsInfo.setText(
-		 * "Treure repetidor desconnecta el repetidor de tots els seus veïns i els connecta entre ells formant un camí."
-		 * ); break; case 2: operadors = new RedSuccessorFunction3();
-		 * operadorsInfo.setText(
-		 * "Afegeix repetidor no usat entre un conjunt de nodes, entre 2 i 5, que formin un camí entre ells. Desconnecta tots els nodes i els connecta directament al repetidor afegit."
-		 * ); break; case 3: operadors = new RedSuccessorFunction4(); operadorsInfo.
-		 * setText("Afegeix repetidor entre 2-5 nodes, i també els pot treure."); break;
-		 * case 4: operadors = new RedSuccessorFunction5(); operadorsInfo.setText(
-		 * "Afegir repetidor entre 2 nodes, i fer un swap entre dos nodes, intercanviant totes les arestes d'un a l'altre node."
-		 * ); break; case 5: operadors = new RedSuccessorFunction6();
-		 * operadorsInfo.setText(
-		 * "Afegir repetidor entre dos nodes, i també moure una aresta existent sense formar bucles."
-		 * ); break; case 6: operadors = new RedSuccessorFunction7(); operadorsInfo.
-		 * setText("Afegir repetidor entre dos nodes, swap de dos nodes i moure aresta."
-		 * ); break;
-		 */
 		default:
 			operadorsInfo.setText("operador no definit");
 
@@ -770,19 +753,6 @@ public class UIMain extends JFrame {
 			heuristic = new RedHeuristicFunction1();
 			heuristicInfo.setText("Minimitza tan sols el cost total del graf.");
 			break;
-		/*
-		 * case 1: heuristic = new RedHeuristicFunction2();
-		 * heuristicInfo.setText("Minimitza l'error total + els repetidors usats");
-		 * break; case 2: heuristic = new RedHeuristicFunction3();
-		 * heuristicInfo.setText("Minimitza l'error total * els repetidors usats");
-		 * break; case 3: heuristic = new RedHeuristicFunction4();
-		 * heuristicInfo.setText(
-		 * "Minimitza l'error total * els repetidors usats, i a més maximitza el sumatori de graus dels repetidors"
-		 * ); break; case 4: heuristic = new RedHeuristicFunction5();
-		 * heuristicInfo.setText(
-		 * "Minimitza l'error total + els repetidors usats, i a més minimitza la distància màxima entre les arestes del graf"
-		 * ); break;
-		 */
 		default:
 			heuristicInfo.setText("heuristic no definit");
 
@@ -795,7 +765,7 @@ public class UIMain extends JFrame {
 
 	private void perDefecteParamsActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_perDefecteParamsActionPerformed
 		valorsPerDefecte();
-		errorInicialLabel.setText("Error Inicial: " + estat.getCoste());
+		errorInicialLabel.setText("Coste Inicial: " + estat.getCoste());
 	}// GEN-LAST:event_perDefecteParamsActionPerformed
 
 	private void estatInicialButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_estatInicialButtonActionPerformed
@@ -824,9 +794,9 @@ public class UIMain extends JFrame {
 	}
 	
 	private void textErrorInicial() {
-		errorInicialLabel.setText("Error Inicial: " + estat.getCoste());
-		errorInicialLabel1.setText("Error Inicial: " + estat.getCoste());
-		errorInicialLabel2.setText("Error Inicial: " + estat.getCoste());
+		errorInicialLabel.setText("Coste Inicial: " + estat.getCoste());
+		errorInicialLabel1.setText("Coste Inicial: " + estat.getCoste());
+		errorInicialLabel2.setText("Coste Inicial: " + estat.getCoste());
 	}
 
 	/**
@@ -850,7 +820,7 @@ public class UIMain extends JFrame {
 			return true;
 		}
 		if (ns + nc > m * n) {
-			error("Numero de centrals i repetidors massa gran.");
+			error("Numero de sensors i centres massa gran.");
 			err = true;
 		} else if (ns < 1) {
 			error("Numero de sensors massa petit.");
