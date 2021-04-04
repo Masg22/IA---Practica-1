@@ -662,7 +662,7 @@ public class OldState {
 			for (int j = 0; j < nsensors + ncentres; j++)
 				connexions[i][j] = false;
 		
-		/*Collections.sort(sensores, new Comparator<Sensor>() {
+		Collections.sort(sensores, new Comparator<Sensor>() {
 			@Override
 			public int compare(Sensor s1, Sensor s2) {
 				// We sort the sensors with the distance from the 0,0 coordinate
@@ -682,7 +682,7 @@ public class OldState {
 
 				return (distC2.compareTo(distC1));
 			}
-		});*/
+		});
 		
 		/*System.out.println("SOL2  S:" + nsensors);
 		

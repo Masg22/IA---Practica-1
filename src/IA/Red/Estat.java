@@ -544,7 +544,7 @@ public class Estat {
 		});
 		*/
 		
-		//UIMain.modificaNetworkRePaint(this);
+		UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -635,7 +635,7 @@ public class Estat {
 	//	System.out.println("SOL2  S:" + sensores.toString());
 	//	System.out.println("SOL2  C:" + centros.toString());
 		
-	//	UIMain.modificaNetworkRePaint(this);
+		UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -664,7 +664,6 @@ public class Estat {
 						if (connexSList.get(js).getIsFree() && sensorsConnected[j] && ((connexSList.get(is).getTransmission()
 								+ connexSList.get(js).getTransmission()) <= sensores.get(j).getCapacidad() * 3)) {
 							Boolean aux = connexSList.get(js).addConnectionIn(js, is);
-							System.out.println(j);
 							if(aux) {
 								connexions[i][j] = true;
 								sensorsConnected[i] = true;	
@@ -675,7 +674,6 @@ public class Estat {
 				}
 			}
 		}
-		System.out.println("\n" + connexionesToString());
 		calcularCoste();
 	}
 
@@ -722,7 +720,7 @@ public class Estat {
 		});
 
 		
-	//	UIMain.modificaNetworkRePaint(this);
+		UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -1126,6 +1124,7 @@ public class Estat {
 			for (int i = 0; i < nsensors + ncentres; i++)
 				for (int j = 0; j < nsensors + ncentres; j++)
 					connexions[i][j] = false;
+			
 			for(int i = 1; i < connexSList.size(); ++i) {
 				int out = connexSList.get(i).getConnectionOut();
 				if(out < 0) {

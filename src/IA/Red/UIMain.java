@@ -92,11 +92,6 @@ public class UIMain extends JFrame {
 		jLabel27 = new javax.swing.JLabel();
 		jLabel28 = new javax.swing.JLabel();
 		jLabel29 = new javax.swing.JLabel();
-		maxCentText = new javax.swing.JTextField();
-		alfaText = new javax.swing.JTextField();
-		betaText = new javax.swing.JTextField();
-		gammaText = new javax.swing.JTextField();
-		actualitzarParamsButton = new javax.swing.JButton();
 		jPanel1 = new javax.swing.JPanel();
 		perDefecteParamsButton = new javax.swing.JButton();
 		panelIniciNetwork = new javax.swing.JPanel();
@@ -322,82 +317,6 @@ public class UIMain extends JFrame {
 		jPanel6.add(errorInicialLabel, gridBagConstraints);
 
 		panelIniciParams.add(jPanel6);
-
-		jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Paràmetres del Problema"));
-		jPanel12.setLayout(new java.awt.GridBagLayout());
-
-		jLabel26.setText("nombre màxim de Centres:");
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.gridwidth = 5;
-		gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-		jPanel12.add(jLabel26, gridBagConstraints);
-
-		jLabel27.setText("gamma:");
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 4;
-		gridBagConstraints.gridy = 1;
-		gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 5);
-		jPanel12.add(jLabel27, gridBagConstraints);
-
-		jLabel28.setText("beta:");
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 2;
-		gridBagConstraints.gridy = 1;
-		gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 5);
-		jPanel12.add(jLabel28, gridBagConstraints);
-
-		jLabel29.setText("alfa:");
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 1;
-		gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-		jPanel12.add(jLabel29, gridBagConstraints);
-
-		maxCentText.setColumns(3);
-		maxCentText.setText("4");
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 5;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
-		jPanel12.add(maxCentText, gridBagConstraints);
-
-		alfaText.setColumns(3);
-		alfaText.setText("3");
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 1;
-		gridBagConstraints.gridy = 1;
-		jPanel12.add(alfaText, gridBagConstraints);
-
-		betaText.setColumns(3);
-		betaText.setText("2");
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 3;
-		gridBagConstraints.gridy = 1;
-		jPanel12.add(betaText, gridBagConstraints);
-
-		gammaText.setColumns(3);
-		gammaText.setText("1");
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 5;
-		gridBagConstraints.gridy = 1;
-		jPanel12.add(gammaText, gridBagConstraints);
-
-		actualitzarParamsButton.setFont(new java.awt.Font("MS Sans Serif", 1, 11)); // NOI18N
-		actualitzarParamsButton.setText("Actualitzar paràmetres");
-		actualitzarParamsButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				actualitzarParamsButtonActionPerformed(evt);
-			}
-		});
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridy = 2;
-		gridBagConstraints.gridwidth = 5;
-		gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-		jPanel12.add(actualitzarParamsButton, gridBagConstraints);
-
-		panelIniciParams.add(jPanel12);
 
 		jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
@@ -633,9 +552,9 @@ public class UIMain extends JFrame {
 		panelHillClimbing.add(jPanel2, gridBagConstraints);
 
 		panelIniciNetwork1.setBorder(javax.swing.BorderFactory.createTitledBorder("Network"));
-		panelIniciNetwork1.setMaximumSize(new java.awt.Dimension(800, 800));
-		panelIniciNetwork1.setMinimumSize(new java.awt.Dimension(500, 500));
-		panelIniciNetwork1.setPreferredSize(new java.awt.Dimension(500, 500));
+		panelIniciNetwork1.setMaximumSize(new java.awt.Dimension(1200, 1200));
+		panelIniciNetwork1.setMinimumSize(new java.awt.Dimension(700, 700));
+		panelIniciNetwork1.setPreferredSize(new java.awt.Dimension(700, 700));
 		panelIniciNetwork1.setLayout(new java.awt.BorderLayout());
 		panelIniciNetwork1.add(dibuixNetworkHC, java.awt.BorderLayout.CENTER);
 
@@ -691,9 +610,9 @@ public class UIMain extends JFrame {
 		panelSimulatedAnnealing.add(jPanel3, gridBagConstraints);
 
 		panelIniciNetwork3.setBorder(javax.swing.BorderFactory.createTitledBorder("Network"));
-		panelIniciNetwork3.setMaximumSize(new java.awt.Dimension(800, 800));
-		panelIniciNetwork3.setMinimumSize(new java.awt.Dimension(500, 500));
-		panelIniciNetwork3.setPreferredSize(new java.awt.Dimension(500, 500));
+		panelIniciNetwork3.setMaximumSize(new java.awt.Dimension(1200, 1200));
+		panelIniciNetwork3.setMinimumSize(new java.awt.Dimension(700, 700));
+		panelIniciNetwork3.setPreferredSize(new java.awt.Dimension(700, 700));
 		panelIniciNetwork3.setLayout(new java.awt.BorderLayout());
 		panelIniciNetwork3.add(dibuixNetworkSA, java.awt.BorderLayout.CENTER);
 
@@ -769,6 +688,7 @@ public class UIMain extends JFrame {
 			cerca.fitxerResultats(estat, info_einicial, info_algoritme, info_operadors, info_heuristic, info_k,
 					info_iter, info_passos_iter, info_lambda);
 			dibuixNetworkSA.novaNetwork(cerca.getEstatFinal());
+			cerca.getEstatFinal().finalUI();
 			dibuixNetworkSA.actualitzar();
 		} catch (Exception e) {
 			error(e.toString());
@@ -874,27 +794,9 @@ public class UIMain extends JFrame {
 	}// GEN-LAST:event_kTextActionPerformed
 
 	private void perDefecteParamsActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_perDefecteParamsActionPerformed
-		valorsPerDefecteParams();
 		valorsPerDefecte();
-		// Actualitzar Params
-		int alfa = Integer.parseInt(alfaText.getText());
-		int beta = Integer.parseInt(betaText.getText());
-		int gamma = Integer.parseInt(gammaText.getText());
-		int maxCent = Integer.parseInt(maxCentText.getText());
-		estat.actualitzarParametres(alfa, beta, gamma, maxCent);
 		errorInicialLabel.setText("Error Inicial: " + estat.getCoste());
 	}// GEN-LAST:event_perDefecteParamsActionPerformed
-
-	private void actualitzarParamsButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_actualitzarParamsButtonActionPerformed
-		if (comprovarParams())
-			return;
-		int alfa = Integer.parseInt(alfaText.getText());
-		int beta = Integer.parseInt(betaText.getText());
-		int gamma = Integer.parseInt(gammaText.getText());
-		int maxCent = Integer.parseInt(maxCentText.getText());
-		estat.actualitzarParametres(alfa, beta, gamma, maxCent);
-		textErrorInicial();
-	}// GEN-LAST:event_actualitzarParamsButtonActionPerformed
 
 	private void estatInicialButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_estatInicialButtonActionPerformed
 		estat.generarEstatInicial(estatInicialCombo.getSelectedIndex());
@@ -941,11 +843,7 @@ public class UIMain extends JFrame {
 			nc = Integer.parseInt(nCentresText.getText());
 			ss = Integer.parseInt(seedSensorsText.getText());
 			sc = Integer.parseInt(seedCentresText.getText());
-			alfa = Integer.parseInt(alfaText.getText());
-			beta = Integer.parseInt(betaText.getText());
-			gamma = Integer.parseInt(gammaText.getText());
-			maxCent = Integer.parseInt(maxCentText.getText());
-			if (m < 0 || n < 0 || ns < 0 || nc < 0 || alfa < 0 || beta < 0 || gamma < 0 || maxCent < 0)
+			if (m < 0 || n < 0 || ns < 0 || nc < 0)
 				throw new Exception();
 		} catch (Exception e) {
 			error("S'han d'introduir nombres naturals.");
@@ -959,12 +857,6 @@ public class UIMain extends JFrame {
 			err = true;
 		} else if (nc < 1) {
 			error("Numero de centres massa petit.");
-			err = true;
-		} else if (alfa <= beta || beta <= gamma) {
-			error("Els paràmetres han de complir alfa > beta > gamma");
-			err = true;
-		} else if (maxCent > nc) {
-			error("El nombre màxim de centres no pot excedir el nombre de centres existents.");
 			err = true;
 		}
 		if (!err)
@@ -1030,18 +922,8 @@ public class UIMain extends JFrame {
 		seedCentresText.setText("4321");
 	}
 
-	private void valorsPerDefecteParams() {
-		alfaText.setText("3");
-		betaText.setText("2");
-		gammaText.setText("1");
-		maxCentText.setText("4");
-	}
-
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JMenuItem Salir;
-	private javax.swing.JButton actualitzarParamsButton;
-	private javax.swing.JTextField alfaText;
-	private javax.swing.JTextField betaText;
 	private static IA.Red.DibuixNetwork dibuixNetwork1;
 	private IA.Red.DibuixNetwork dibuixNetworkHC;
 	private IA.Red.DibuixNetwork dibuixNetworkSA;
@@ -1050,7 +932,6 @@ public class UIMain extends JFrame {
 	private javax.swing.JLabel errorInicialLabel2;
 	private javax.swing.JButton estatInicialButton;
 	private javax.swing.JComboBox estatInicialCombo;
-	private javax.swing.JTextField gammaText;
 	private javax.swing.JButton generarNetworkButton;
 	private javax.swing.JComboBox heuristicCombo;
 	private javax.swing.JTextPane heuristicInfo;
@@ -1098,7 +979,6 @@ public class UIMain extends JFrame {
 	private javax.swing.JTextField kText;
 	private javax.swing.JTextField lambdaText;
 	private javax.swing.JTextField mText;
-	private javax.swing.JTextField maxCentText;
 	private javax.swing.JTextField nSensorsText;
 	private javax.swing.JTextField nCentresText;
 	private javax.swing.JTextField seedSensorsText;
