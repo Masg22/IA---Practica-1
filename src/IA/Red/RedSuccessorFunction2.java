@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import aima.search.framework.Successor;
 import aima.search.framework.SuccessorFunction;
 
-public class RedSuccessorFunction1 implements SuccessorFunction {
-
+public class RedSuccessorFunction2  implements SuccessorFunction{
+	
 	@Override
 	public List getSuccessors(Object actualState) {
 		ArrayList<Successor> llistaSucc = new ArrayList<>();

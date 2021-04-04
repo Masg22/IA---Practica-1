@@ -54,7 +54,7 @@ public class RedProblem {
 				Integer ncent = in.nextInt();
 				
 				Estat estat = new Estat(nsens, sseed, ncent, cseed);
-				estat.solucioInicial3();
+				estat.solucioInicial1();
 				SimulatedAnnealingSearch(estat);
 			}
 		}
@@ -74,7 +74,7 @@ public class RedProblem {
             System.out.println("COSTE FINAL " + ((Estat) search.getGoalState()).getCoste()+"\n");
             System.out.println("MEJORA DE COSTE " + (estat.getCoste() - ((Estat) search.getGoalState()).getCoste())+"\n");
             
-            System.out.println("Tiempo de ejecuci�n: " + (System.currentTimeMillis()-TInicio) +"ms" );
+            System.out.println("Tiempo de ejecucion: " + (System.currentTimeMillis()-TInicio) +"ms" );
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,17 +85,17 @@ public class RedProblem {
         try {
         	long TInicio = System.currentTimeMillis();
             Problem problem =  new Problem(estat, new RedSuccessorFunction1(), new RedGoalTest(), new RedHeuristicFunction1());
-            Search search = new SimulatedAnnealingSearch(10000, 100, 10, 0.5);
+            Search search = new SimulatedAnnealingSearch(8000, 80, 4, 0.001);
             SearchAgent agent = new SearchAgent(problem, search);
 
-           // printActions(agent.getActions());
-           // printInstrumentation(agent.getInstrumentation());
+            //printActions(agent.getActions());
+            //printInstrumentation(agent.getInstrumentation());
             System.out.println(((Estat) search.getGoalState()).toString());
             System.out.println("\n" + ((Estat) search.getGoalState()).connexionesToString());
             System.out.println("COSTE FINAL " + ((Estat) search.getGoalState()).getCoste()+"\n");
             System.out.println("MEJORA DE COSTE " + (estat.getCoste() - ((Estat) search.getGoalState()).getCoste())+"\n");
             
-            System.out.println("Tiempo de ejecuci�n: " + (System.currentTimeMillis()-TInicio) +"ms" );
+            System.out.println("Tiempo de ejecucion: " + (System.currentTimeMillis()-TInicio) +"ms" );
 
         } catch (Exception e) {
             e.printStackTrace();
