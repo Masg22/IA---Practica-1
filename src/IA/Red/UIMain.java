@@ -684,7 +684,7 @@ public class UIMain extends JFrame {
 			cerca.executarCerca();
 			infoSA.setText("");
 			infoSA.setText("Coste Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
-					+ cerca.getAccions());
+					+ cerca.getAccions() + "\n" + cerca.getEstatFinal().connexionesToString());
 			cerca.fitxerResultats(estat, info_einicial, info_algoritme, info_operadors, info_heuristic, info_k,
 					info_iter, info_passos_iter, info_lambda);
 			dibuixNetworkSA.novaNetwork(cerca.getEstatFinal());
@@ -710,7 +710,7 @@ public class UIMain extends JFrame {
 			cerca.executarCerca();
 			infoHC.setText("");
 			infoHC.setText("Coste Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
-					+ cerca.getAccions());
+					+ cerca.getAccions() + "\n" + cerca.getEstatFinal().connexionesToString());
 			cerca.fitxerResultats(estat, info_einicial, info_algoritme, info_operadors, info_heuristic, info_k,
 					info_iter, info_passos_iter, info_lambda);
 			dibuixNetworkHC.novaNetwork(cerca.getEstatFinal());
