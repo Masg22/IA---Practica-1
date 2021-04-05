@@ -163,8 +163,20 @@ public class Estat {
 					Integer connex = q.poll();
 					//System.out.println("ESTOY EN" + connex + it);
 					if (connex < 0) { // CENTRE
-						connexCList.get(- connex).actCapacity(transmissionChange);
-						return true;
+						Boolean ret = connexCList.get(- connex).actCapacity(transmissionChange);
+						if(!ret) {
+							Queue<Integer> q2 = new LinkedList<Integer>();
+							q2.add(connexSList.get(actual).getConnectionOut());
+							Integer del = 0;
+							while(!q2.isEmpty() ) {
+								del = q2.poll();
+								if(connex != del) {
+									Boolean aux2 = connexSList.get(del).addTransmission(-transmissionChange, del);
+									q2.add(connexSList.get(del).getConnectionOut());
+								}
+							}
+						}
+						return ret;
 					}
 					else { // SENSOR
 						Boolean aux = connexSList.get(connex).addTransmission(transmissionChange, connex);
@@ -318,7 +330,7 @@ public class Estat {
 			}
 			
 			public Boolean actCapacity(Double capacityChange) {
-				if(this.reception + capacityChange <= 150.0)this.reception += capacityChange;
+				if(this.reception + capacityChange <= 150.0) this.reception += capacityChange;
 				else return false;
 				return true;
 			}
@@ -424,7 +436,7 @@ public class Estat {
 		origCentros = new CentrosDatos(ncent, centSeed);
 		
 		nsensors = nsens;
-		ncentres = nsens;
+		ncentres = ncent;
 		
 		connexions = new boolean[nsensors + ncentres][nsensors + ncentres]; // Les connexions ja estan a false
 		for (int i = 0; i < nsensors + ncentres; i++)
@@ -544,7 +556,7 @@ public class Estat {
 		});
 		*/
 		
-		UIMain.modificaNetworkRePaint(this);
+		//UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -635,7 +647,7 @@ public class Estat {
 	//	System.out.println("SOL2  S:" + sensores.toString());
 	//	System.out.println("SOL2  C:" + centros.toString());
 		
-		UIMain.modificaNetworkRePaint(this);
+		//UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -720,7 +732,7 @@ public class Estat {
 		});
 
 		
-		UIMain.modificaNetworkRePaint(this);
+		//UIMain.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -917,9 +929,8 @@ public class Estat {
 						
 						eraseCost(x1,y1,x2,y2,trans);
 						//System.out.println("COST despres erase" + coste + "\n");
-
-						
 						connexCList.get(-oldConnexID).deleteConnexion(sensorID);
+						
 					} else { // Si sensorID estaba conectat a un Sensor
 						x1 = sensores.get(sensorID-1).getCoordX();
 						y1 = sensores.get(sensorID-1).getCoordY();
@@ -1109,6 +1120,11 @@ public class Estat {
 		public String connexionesToString() {
 			StringBuffer res = new StringBuffer();
 			res.append("CONNEXIONES\n");
+			
+			for(int i = 1; i <connexCList.size(); ++i) {
+				res.append("Centro" + (i-1) + ", con cap: "+ connexCList.get(i).getRecepction()+"\n");
+			}
+			
 			for(int i = 1; i < connexSList.size(); ++i) {
 				res.append("Sensor" + (i-1) + ", con cap: "+ sensores.get(i-1).getCapacidad() +", con transmision: " + connexSList.get(i).getTransmission()+" , ");
 				int out = connexSList.get(i).getConnectionOut();
