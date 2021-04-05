@@ -791,8 +791,8 @@ public class Estat {
 				Double dist2 = Math.pow(Math.sqrt(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))),2);
 				coste +=  dist2 * (LAMBDA * transmission);
 				
-				System.out.println("COSTE:  " + coste + "\n");
-				System.out.println("TRANSMISSION:  " + transmission + "\n");
+				//System.out.println("COSTE:  " + coste + "\n");
+				//System.out.println("TRANSMISSION:  " + transmission + "\n");
 
 			}
 		}
