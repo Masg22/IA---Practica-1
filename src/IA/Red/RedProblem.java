@@ -88,8 +88,6 @@ public class RedProblem {
             Search search = new SimulatedAnnealingSearch(8000, 80, 4, 0.001);
             SearchAgent agent = new SearchAgent(problem, search);
 
-            //printActions(agent.getActions());
-            //printInstrumentation(agent.getInstrumentation());
             System.out.println(((Estat) search.getGoalState()).toString());
             System.out.println("\n" + ((Estat) search.getGoalState()).connexionesToString());
             System.out.println("COSTE FINAL " + ((Estat) search.getGoalState()).getCoste()+"\n");

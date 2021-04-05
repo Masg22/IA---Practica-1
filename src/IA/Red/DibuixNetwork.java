@@ -21,10 +21,6 @@ public class DibuixNetwork extends Dibuix {
 		super(n * 10, m * 10);
 		try {
 			setColorQuadricula(new Color(200, 200, 200));
-			/*
-			 * int p1=dibuixarPunt(10,10); int p2=dibuixarPunt(120,70); int
-			 * p3=dibuixarPunt(30,170); dibuixarFletxa(p1,p2);
-			 */
 			setDibuixarQuadricula(true);
 			setTamanyQuadriculaX(10);
 			setTamanyQuadriculaY(10);
@@ -35,38 +31,27 @@ public class DibuixNetwork extends Dibuix {
 
 	/*
 	 * Constructora de la classe, donant el tamany del dibuix, i les dimensions de
-	 * la quadricula (M i N). S'inicialitza amb els vectors de centrals i
-	 * repetidors, i amb les connexions.
+	 * la quadricula (M i N). S'inicialitza amb els vectors de sensors,
+	 * centres i amb les connexions.
 	 */
 	public DibuixNetwork(Estat newNetwork) {
-		super(/* ciutat.getN()*10,ciutat.getM()*10 */);
+		super();
 		estat = newNetwork;
 		init();
 	}
 
 	public DibuixNetwork(int width, int height, int n, int m, Sensores sensores, CentrosDatos centros, boolean[][] connexions) {
-		// Potser caldria calcular el width i height necessaris pq no estigui deformat,
-		// en principi hauria de ser una quadricula de 10
-		super(/* n*10,m*10 */);
-		// System.out.println("mides: "+m+" x "+n);
-		// calcular el limit de la quadricula, per tal que només es mostrin MxN
-
+		super();
 		for (int i = 0; i < sensores.size(); i++) {
 			Sensor sensor = sensores.get(i);
 			dibuixarSensor(sensor.getCoordX(), sensor.getCoordY());
-			// System.out.println("central: "+central.getX()+" "+central.getY());
 		}
 		for (int i = 0; i < centros.size(); i++) {
 			Centro centro = centros.get(i);
 			dibuixarCentre(centro.getCoordX(), centro.getCoordY());
-			// System.out.println("repetidor: "+repetidor.getX()+" "+repetidor.getY());
 		}
 		try {
 			setColorQuadricula(new Color(200, 200, 200));
-			/*
-			 * int p1=dibuixarPunt(10,10); int p2=dibuixarPunt(120,70); int
-			 * p3=dibuixarPunt(30,170); dibuixarFletxa(p1,p2);
-			 */
 			setDibuixarQuadricula(true);
 			setTamanyQuadriculaX(10);
 			setTamanyQuadriculaY(10);
@@ -78,7 +63,6 @@ public class DibuixNetwork extends Dibuix {
 	}
 
 	public void novaNetwork(Estat newNetwork) {
-		// setSize (ciutat.getN()*10,ciutat.getM()*10);
 		estat = newNetwork;
 		init();
 	}
@@ -111,7 +95,6 @@ public class DibuixNetwork extends Dibuix {
 		}
 	}
 
-	// (Re)Carrega els nodes de la ciutat
 	private void init() {
 		esborrarTot();
 		setColorFletxes(Color.orange);
@@ -121,20 +104,14 @@ public class DibuixNetwork extends Dibuix {
 		for (int i = 0; i < sensores.size(); i++) {
 			Sensor sensor = sensores.get(i);
 			dibuixarSensor(sensor.getCoordX(), sensor.getCoordY());
-			// System.out.println("central: "+central.getX()+" "+central.getY());
 		}
 		for (int i = 0; i < centros.size(); i++) {
 			Centro centro = centros.get(i);
 			dibuixarCentre(centro.getCoordX(), centro.getCoordY());
-			// System.out.println("repetidor: "+repetidor.getX()+" "+repetidor.getY());
 		}
 
 		try {
 			setColorQuadricula(new Color(200, 200, 200));
-			/*
-			 * int p1=dibuixarPunt(10,10); int p2=dibuixarPunt(120,70); int
-			 * p3=dibuixarPunt(30,170); dibuixarFletxa(p1,p2);
-			 */
 			setDibuixarQuadricula(true);
 			setTamanyQuadriculaX(10);
 			setTamanyQuadriculaY(10);
@@ -145,9 +122,6 @@ public class DibuixNetwork extends Dibuix {
 		}
 	}
 
-	/**
-	 * Actualitza (Redibuixa) les connexions de la ciutat actual
-	 */
 	public void actualitzar() throws Exception {
 		esborrarFletxes();
 		

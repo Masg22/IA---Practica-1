@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import IA.Red.UIMain;
+import IA.Red.Main;
 import IA.Red.Estat.ConnexCentro;
 import IA.Red.Estat.ConnexSensor;
 
@@ -87,15 +87,11 @@ public class Estat {
 				this.setTransmission(transmissionParent + transmissionChild);
 				Boolean ret = this.recActTransmission(transmissionChild, parentId);
 				
-				//if(parentId == 6) System.out.println("add 1 " + transmissionChild);
-				//if(parentId == 6) System.out.println("add 2 " + transmissionParent);
 				if(!ret) {
 					this.setTransmission(transmissionParent);
-					//if(parentId == 6) System.out.println("final " + transmissionParent);
 				}
 				else {
 					connectionIn.add(sensorId);
-					//if(parentId == 6) System.out.println("final " + (transmissionChild + transmissionParent));
 				}
 
 				if (connectionIn.size() >= MAXINPUTSENSOR) {
@@ -118,18 +114,14 @@ public class Estat {
 
 				Double transmission1 = connexSList.get(sensorId).getTransmission();
 				Double transmission2 = connexSList.get(actual).getTransmission()-transmission1;
-				//if(actual == 6) System.out.println("delete 1 " + transmission1);
-			//	if(actual == 6) System.out.println("delete 2 " + transmission2);
 				
 				this.setTransmission(transmission2);
 				Boolean aux = this.recActTransmission(-transmission1, actual);
 				if (aux) {
 					isFree = true;
-					//if(actual == 6) System.out.println("final " + transmission2);
 				}
 				else {
 					this.setTransmission(connexSList.get(actual).getTransmission()+transmission1);
-				//	if(actual == 6) System.out.println("final " + connexSList.get(actual).getTransmission()+transmission1);
 					connectionIn.add(sensorId);
 					return false;
 				}
@@ -143,25 +135,13 @@ public class Estat {
 			}
 			
 			public Boolean recActTransmission(Double transmissionChange, int actual){
-				/*this.transmission += transmissionChange;
-				int next = this.connectionOut;
-				if (next < 0) { //es un centro
-					System.out.println("ConnOut C:" + connectionOut);
-					return (connexCList.get(-(next)).actCapacity(transmissionChange));
-				}
-				else { // es otro sensor
-					connexSList.get(next).recActTransmission(transmissionChange, next);
-				}
-				return false;*/
 				
 				Queue<Integer> q = new LinkedList<Integer>();
 				q.add(this.connectionOut);
 				int it = 0;
-				//System.out.println("SOY" + actual + it);
 				while (! q.isEmpty()) {
 					++it;
 					Integer connex = q.poll();
-					//System.out.println("ESTOY EN" + connex + it);
 					if (connex < 0) { // CENTRE
 						connexCList.get(- connex).actCapacity(transmissionChange);
 						return true;
@@ -183,8 +163,6 @@ public class Estat {
 							return false;
 						}
 						q.add(connexSList.get(connex).getConnectionOut());	
-						//System.out.println("VOY A" + connexSList.get(connex).getConnectionOut() );
-
 					}
 				}
 				return false;
@@ -225,14 +203,10 @@ public class Estat {
 						return (connexCList.get(-connex).getRecepction() + trans <= 150);
 					}
 					else { // SENSOR
-						//connexSList.get(connex).addTransmission(transmissionChange, connex);
 						if (connexSList.get(connex).getTransmission() + trans > sensores.get(connex -1).getCapacidad() * 3) return  false;
 						q.add(connexSList.get(connex).getConnectionOut());	
-						//System.out.println("VOY A" + connexSList.get(connex).getConnectionOut() );
-
 					}
 				}
-				
 				return false;
 			}
 			
@@ -500,10 +474,7 @@ public class Estat {
 		
 		sensores.addAll(origSensores);
 		centros.addAll(origCentros);
-		
-		//System.out.println("SOL1  S:" + sensores.toString());
-		//System.out.println("SOL1  C:" + centros.toString());
-		
+				
 		connexSList.clear();
 		connexCList.clear();
 
@@ -520,31 +491,8 @@ public class Estat {
 		for (int i = 0; i < nsensors + ncentres; i++)
 			for (int j = 0; j < nsensors + ncentres; j++)
 				connexions[i][j] = false;
-		/*
-		Collections.sort(sensores, new Comparator<Sensor>() {
-			@Override
-			public int compare(Sensor s1, Sensor s2) {
-				// We sort the sensors with the distance from the 0,0 coordinate
-				Integer distS1 = (s1.getCoordX() * s1.getCoordX()) + (s1.getCoordY() * s1.getCoordY());
-				Integer distS2 = (s2.getCoordX() * s2.getCoordX()) + (s2.getCoordY() * s2.getCoordY());
-
-				return (distS2.compareTo(distS1));
-			}
-		});
-
-		Collections.sort(centros, new Comparator<Centro>() {
-			@Override
-			public int compare(Centro c1, Centro c2) {
-				// We sort the centers with the distance from the 0,0 coordinate
-				Integer distC1 = (c1.getCoordX() * c1.getCoordX()) + (c1.getCoordY() * c1.getCoordY());
-				Integer distC2 = (c2.getCoordX() * c2.getCoordX()) + (c2.getCoordY() * c2.getCoordY());
-
-				return (distC2.compareTo(distC1));
-			}
-		});
-		*/
 		
-		UIMain.modificaNetworkRePaint(this);
+		Main.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -584,8 +532,6 @@ public class Estat {
 				}
 			}
 		}
-		//System.out.println("\n" + "SOL INICIAL: " + "\n");
-		//System.out.println("\n" + connexionesToString());
 		calcularCoste();
 	}
 
@@ -631,11 +577,7 @@ public class Estat {
 			}
 		});
 		
-		
-	//	System.out.println("SOL2  S:" + sensores.toString());
-	//	System.out.println("SOL2  C:" + centros.toString());
-		
-		UIMain.modificaNetworkRePaint(this);
+		Main.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -720,7 +662,7 @@ public class Estat {
 		});
 
 		
-		UIMain.modificaNetworkRePaint(this);
+		Main.modificaNetworkRePaint(this);
 
 		Boolean[] sensorsConnected = new Boolean[sensores.size()];
 		Arrays.fill(sensorsConnected, Boolean.FALSE);
@@ -762,8 +704,6 @@ public class Estat {
 				}
 			}
 		}
-		//System.out.println("\n" + "SOL INICIAL: " + "\n");
-		//System.out.println("\n" + connexionesToString());
 		calcularCoste();
 	}
 	public void calcularCoste() {
@@ -790,37 +730,17 @@ public class Estat {
 				}
 				Double dist2 = Math.pow(Math.sqrt(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))),2);
 				coste +=  dist2 * (LAMBDA * transmission);
-				
-				//System.out.println("COSTE:  " + coste + "\n");
-				//System.out.println("TRANSMISSION:  " + transmission + "\n");
-
 			}
 		}
 		
 	}
 
 	public void eraseCost(int x1, int y1, int x2, int y2, Double trans) {
-	//	System.out.println("---------------" + "\n");
-	//	System.out.println("COSTE" + coste + "\n");
 		coste -= Math.pow(Math.sqrt(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))),2) * (trans);
-	
-	//	System.out.println("Transmission added" + trans + "\n");
-	//	System.out.println("Distance added" + Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) + "\n");
-		
-	//	System.out.println("COSTE" + coste + "\n");
-	//	if(coste < 0) coste = 0.0;
 	}
 	
 	public void sumCost(int x1, int y1, int x2, int y2, Double trans) {
-	//	System.out.println("++++++++++++++++++++" + "\n");
-		//System.out.println("COSTE" + coste + "\n");
-
 		coste +=  Math.pow(Math.sqrt(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))),2) * (trans);
-		
-		//System.out.println("Transmission added" + trans + "\n");
-	//	System.out.println("Distance added" + Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) + "\n");
-		
-	//	System.out.println("COSTE" + coste + "\n");
 	}
 	
 	public void actualitzarParametres(int a, int b, int g, int mnr) {
@@ -834,24 +754,12 @@ public class Estat {
 		return false;
 	}
 	public Boolean createConnexionS(Integer sensorID, Integer newConnexID) {
-		//System.out.println("\n" + "PRE-OPERADOR: " + "\n");
-		//System.out.println("\n" + connexionesToString());
-		
 		int x1,y1,x2,y2;
 		Double trans;
 		int oldConnexID = connexSList.get(sensorID).getConnectionOut();
 		
-		/*System.out.println("ANTIGA CONNEX: " + oldConnexID);
-		System.out.println("NOVA CONNEX: " + newConnexID);
-		System.out.println("SOC CONNEX: " + sensorID);
-		*/
-		
 		if(newConnexID == sensorID || oldConnexID == newConnexID) return false;
 		
-		//if(newConnexID > 0 && !(connexSList.get(newConnexID).checkExit(sensorID))) return false;
-		
-		//if(newConnexID > 0 && !connexSList.get(newConnexID).checkPropagation(connexSList.get(sensorID).getTransmission(), newConnexID)) return false;
-
 		if (newConnexID < 0) { // Si la nova Conexio es a un Centre
 			if (connexCList.get(-newConnexID).getIsFree() && connexSList.get(sensorID).getTransmission() + connexCList.get(-newConnexID).getRecepction() <= 150.0 ) {
 				if (oldConnexID < 0) { // Si sensorID estaba conectat a un Centre
@@ -884,8 +792,10 @@ public class Estat {
 				}
 
 				connexSList.get(sensorID).setConnectionOut(newConnexID);
+				
 				Boolean aux = connexCList.get(-newConnexID).addConnectionIn(sensorID);
-				if(!aux) System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRRRROOOOOOOOORRRRRRRRRRRRRRRRRRRR");
+				if(!aux) System.out.println("ERROR\n");
+				
 				x1 = sensores.get(sensorID-1).getCoordX();
 				y1 = sensores.get(sensorID-1).getCoordY();
 				
@@ -895,7 +805,6 @@ public class Estat {
 				trans = connexSList.get(sensorID).getTransmission();
 				
 				sumCost(x1,y1,x2,y2,trans);
-		
 
 				return true;
 			} else {
@@ -903,12 +812,10 @@ public class Estat {
 				return false;
 			}
 		} else { // Si la nova Conexio es a un Sensor
-			
 			Double res_cap_nou = sensores.get((newConnexID-1)).getCapacidad() * 3;
 			Double trans_act = connexSList.get(sensorID).getTransmission()+ connexSList.get(newConnexID).getTransmission(); 
-			if (trans_act <= res_cap_nou && connexSList.get(newConnexID).getIsFree() /*&& connexSList.get(newConnexID).checkPropagation(connexSList.get(sensorID).getTransmission(), newConnexID)*/) {
+			if (trans_act <= res_cap_nou && connexSList.get(newConnexID).getIsFree()) {
 					if (oldConnexID < 0) { // Si sensorID estaba conectat a un Centre
-						
 						x1 = sensores.get(sensorID-1).getCoordX();
 						y1 = sensores.get(sensorID-1).getCoordY();
 						
@@ -918,8 +825,6 @@ public class Estat {
 						trans = connexSList.get(sensorID).getTransmission();
 						
 						eraseCost(x1,y1,x2,y2,trans);
-						//System.out.println("COST despres erase" + coste + "\n");
-
 						
 						connexCList.get(-oldConnexID).deleteConnexion(sensorID);
 					} else { // Si sensorID estaba conectat a un Sensor
@@ -933,14 +838,10 @@ public class Estat {
 					
 						Boolean aux = connexSList.get(oldConnexID).deleteConnexion(sensorID, oldConnexID);
 						if(!aux) {
-							//eraseCost(x1,y1,x2,y2,trans);
 							return false;
 						}
 						
 						eraseCost(x1,y1,x2,y2,trans);
-						//System.out.println("COST despres erase" + coste + "\n");
-						
-	
 					}
 
 					Boolean aux = connexSList.get(newConnexID).addConnectionIn(newConnexID, sensorID);
@@ -956,8 +857,6 @@ public class Estat {
 							trans = connexSList.get(sensorID).getTransmission();
 							
 							sumCost(x1,y1,x2,y2,trans);
-
-
 						} else { // Si sensorID estaba conectat a un Sensor
 							x1 = sensores.get(sensorID-1).getCoordX();
 							y1 = sensores.get(sensorID-1).getCoordY();
@@ -965,13 +864,9 @@ public class Estat {
 							x2 = sensores.get(oldConnexID-1).getCoordX();
 							y2 = sensores.get(oldConnexID-1).getCoordY();
 							Boolean aux2 = connexSList.get(oldConnexID).addConnectionIn(oldConnexID, sensorID);	
-						//	if(!aux2) 	System.out.println("#################################################################");
 							trans = connexSList.get(sensorID).getTransmission();
 							
 							sumCost(x1,y1,x2,y2,trans);
-						//	System.out.println("COST despres erase" + coste + "\n");
-							
-		
 						}
 					}
 					else {
@@ -991,16 +886,12 @@ public class Estat {
 					
 				}
 			else {
-				//System.out.println("\n" + "NOVA CONEX SENSOR FALSE: " + "\n");
-				//System.out.println("\n" + connexionesToString());
-				//System.out.println("COST " + coste + "\n");
-
 				return false;
 			}
 		}
 		return false;
 	}
-	// pre value es 1 2 o 5
+		// pre value es 1, 2 o 5
 		public void changeCapacityS(Integer sensorId, Integer value) {
 			sensores.get(sensorId).setCapacidad(value);
 		}
@@ -1032,10 +923,8 @@ public class Estat {
 			ArrayList<ConnexSensor> aux = new ArrayList<ConnexSensor>();
 			for(int i = 0; i < connexSList.size(); ++i) {
 				ConnexSensor aux1 = new ConnexSensor(connexSList.get(i));
-			//	ArrayList<Integer> n = new ArrayList<Integer>(connexSList.get(i).getConnectionIn());
 				Double trans1 = new Double(aux1.getTransmission());
 				aux1.setTransmission(trans1);
-			//	aux1.setConnectionIn(n);
 				aux.add(aux1);
 			}
 			return aux;
@@ -1049,8 +938,6 @@ public class Estat {
 			ArrayList<ConnexCentro> aux = new ArrayList<ConnexCentro>();
 			for(int i = 0; i < connexCList.size(); ++i) {
 				ConnexCentro aux1 = new ConnexCentro(connexCList.get(i));
-				//Double recep = new Double(connexCList.get(i).getRecepction());
-				//aux1.setRecepction(recep);
 				aux.add(aux1);
 			}
 			return aux;
@@ -1142,18 +1029,15 @@ public class Estat {
 		}
 		
 		public void actualitzarCentres() {
-            //System.out.println("#################################");
             for(int i = 1; i < connexCList.size(); ++i) {
 
                 ArrayList<Integer> a = connexCList.get(i).getConnectionIn();
                 Double tot = 0.0;
                 for(int k = 0; k < a.size(); ++k) {
                     Double t = connexSList.get(a.get(k)).getTransmission();
-                    //System.out.println("TRANSMISIO A CENTRE" + (i-1) + " de" + t);
                     tot += t;
                 }
                 connexCList.get(i).setRecepction(tot);
-                //System.out.println("FINAL " + (i-1) + " de" + connexCList.get(i).reception);
             }
         }
 }

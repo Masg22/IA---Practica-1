@@ -28,7 +28,7 @@ public class RedCercador {
 	String nodesexp;
 	long temps;
 
-	/** Creates a new instance of ConnectatCercador */
+	/** Creates a new instance of RedCercador */
 	public RedCercador(Estat estat, SuccessorFunction operadors, HeuristicFunction heuristic) {
 		problem = new Problem(estat, operadors, new RedGoalTest(), heuristic);
 		search = new HillClimbingSearch();
