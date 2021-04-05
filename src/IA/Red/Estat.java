@@ -790,7 +790,9 @@ public class Estat {
 				}
 				Double dist2 = Math.pow(Math.sqrt(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))),2);
 				coste +=  dist2 * (LAMBDA * transmission);
-				//System.out.println("COSTE" + dist2 + "\n");
+				
+				System.out.println("COSTE:  " + coste + "\n");
+				System.out.println("TRANSMISSION:  " + transmission + "\n");
 
 			}
 		}
@@ -844,7 +846,7 @@ public class Estat {
 		System.out.println("SOC CONNEX: " + sensorID);
 		*/
 		
-		//if(newConnexID == sensorID || oldConnexID == newConnexID) return false;
+		if(newConnexID == sensorID || oldConnexID == newConnexID) return false;
 		
 		//if(newConnexID > 0 && !(connexSList.get(newConnexID).checkExit(sensorID))) return false;
 		
@@ -1107,16 +1109,21 @@ public class Estat {
 		}
 		
 		public String connexionesToString() {
-			StringBuffer res = new StringBuffer();
-			res.append("CONNEXIONES\n");
-			for(int i = 1; i < connexSList.size(); ++i) {
-				res.append("Sensor" + (i-1) + ", con cap: "+ sensores.get(i-1).getCapacidad() +", con transmision: " + connexSList.get(i).getTransmission()+" , ");
-				int out = connexSList.get(i).getConnectionOut();
-				if(out < 0) res.append("Connectat a " +(out)+"\n");
-				else res.append("Connectat a " +(out-1)+"\n");
-			}
-			return res.toString();
-		}
+            StringBuffer res = new StringBuffer();
+            res.append("CONNEXIONES\n");
+            calcularCoste();
+            actualitzarCentres();
+            for(int i = 1; i < connexCList.size(); ++i) {
+                res.append("Centro " + (i-1) + "con capacidad: " + connexCList.get(i).getRecepction() + "\n");
+            }
+            for(int i = 1; i < connexSList.size(); ++i) {
+                res.append("Sensor" + (i-1) + ", con cap: "+ sensores.get(i-1).getCapacidad() +", con transmision: " + connexSList.get(i).getTransmission()+" , ");
+                int out = connexSList.get(i).getConnectionOut();
+                if(out < 0) res.append("Connectat a " +(out)+"\n");
+                else res.append("Connectat a " +(out-1)+"\n");
+            }
+            return res.toString();
+        }
 		
 		public void finalUI() {
 
@@ -1133,4 +1140,20 @@ public class Estat {
 				else connexions[i-1][out-1] = true;
 			}
 		}
+		
+		public void actualitzarCentres() {
+            //System.out.println("#################################");
+            for(int i = 1; i < connexCList.size(); ++i) {
+
+                ArrayList<Integer> a = connexCList.get(i).getConnectionIn();
+                Double tot = 0.0;
+                for(int k = 0; k < a.size(); ++k) {
+                    Double t = connexSList.get(a.get(k)).getTransmission();
+                    //System.out.println("TRANSMISIO A CENTRE" + (i-1) + " de" + t);
+                    tot += t;
+                }
+                connexCList.get(i).setRecepction(tot);
+                //System.out.println("FINAL " + (i-1) + " de" + connexCList.get(i).reception);
+            }
+        }
 }

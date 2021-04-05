@@ -23,6 +23,7 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 					//System.out.println("ESTOY EN RED SUCCESSSORS centro 2" + nou.connexionesToString());
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to center" + j + "\n");
+					//nou.calcularCoste();
 					llistaSucc.add(new Successor(S.toString(), nou));
 				}
 			}
@@ -33,6 +34,7 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 				if ( nou.createConnexionS(i + 1, k + 1)) {
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to sensor" + k + "\n");
+					//nou.calcularCoste();
 					llistaSucc.add(new Successor(S.toString(), nou));
 				}
 			}

@@ -683,8 +683,8 @@ public class UIMain extends JFrame {
 			cerca = new RedCercador(estat, operadors, heuristic, it, pit, k, lbd);
 			cerca.executarCerca();
 			infoSA.setText("");
-			infoSA.setText("Coste Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
-					+ cerca.getAccions());
+			infoSA.setText(cerca.getEstatFinal().connexionesToString() + "\n " + "Coste Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
+					+ cerca.getAccions() + "\n ");
 			cerca.fitxerResultats(estat, info_einicial, info_algoritme, info_operadors, info_heuristic, info_k,
 					info_iter, info_passos_iter, info_lambda);
 			dibuixNetworkSA.novaNetwork(cerca.getEstatFinal());
@@ -709,8 +709,8 @@ public class UIMain extends JFrame {
 			cerca = new RedCercador(estat, operadors, heuristic);
 			cerca.executarCerca();
 			infoHC.setText("");
-			infoHC.setText("Coste Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
-					+ cerca.getAccions());
+			infoHC.setText(cerca.getEstatFinal().connexionesToString() + "\n " + "Coste Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
+					+ cerca.getAccions() + "\n ");
 			cerca.fitxerResultats(estat, info_einicial, info_algoritme, info_operadors, info_heuristic, info_k,
 					info_iter, info_passos_iter, info_lambda);
 			dibuixNetworkHC.novaNetwork(cerca.getEstatFinal());
