@@ -710,7 +710,7 @@ public class UIMain extends JFrame {
 			cerca.executarCerca();
 			infoHC.setText("");
 			infoHC.setText("Error Final: " + cerca.getEstatFinal().getCoste() + "\n" + cerca.getPropietats()
-					+ cerca.getAccions());
+					+ cerca.getAccions() + cerca.getEstatFinal().connexionesToString());
 			cerca.fitxerResultats(estat, info_einicial, info_algoritme, info_operadors, info_heuristic, info_k,
 					info_iter, info_passos_iter, info_lambda);
 			dibuixNetworkHC.novaNetwork(cerca.getEstatFinal());

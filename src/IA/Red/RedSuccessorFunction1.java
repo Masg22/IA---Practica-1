@@ -16,25 +16,23 @@ public class RedSuccessorFunction1 implements SuccessorFunction {
 			
 			for (int j = 0; j < estat.centros.size(); ++j) {
 				Estat nou = new Estat(estat);
-				System.out.println("ESTOY EN RED SUCCESSSORS centro " + nou.connexionesToString());
+				//System.out.println("ESTOY EN RED SUCCESSSORS centro " + nou.connexionesToString());
 
 				// tots els centres posibles
 				if (nou.createConnexionS(i + 1, -(j) - 1)) {
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to center" + j + "\n");
 					llistaSucc.add(new Successor(S.toString(), nou));
-					System.out.println(nou.connexionesToString());
 				}
 			}
 			for (int k = 0; k < estat.sensores.size(); ++k) {
 				Estat nou = new Estat(estat);
-				System.out.println("ESTOY EN RED SUCCESSSORS sensor " + nou.connexionesToString());
+				//System.out.println("ESTOY EN RED SUCCESSSORS sensor " + nou.connexionesToString());
 				// tots els sensors posibles
 				if ( nou.createConnexionS(i + 1, k + 1)) {
 					StringBuffer S = new StringBuffer();
 					S.append("sensor" + i + "moved to sensor" + k + "\n");
 					llistaSucc.add(new Successor(S.toString(), nou));
-					System.out.println(nou.connexionesToString());
 				}
 			}
 		}
