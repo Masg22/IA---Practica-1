@@ -788,7 +788,7 @@ public class Estat {
 					x2 = sensores.get(idOut - 1).getCoordX();
 					y2 = sensores.get(idOut - 1).getCoordY();
 				}
-				Double dist2 = Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2);
+				Double dist2 = Math.pow( (Math.sqrt( Math.pow((x1-x2),2) + Math.pow((y1-y2),2))), 2);
 				coste +=  dist2 * (LAMBDA * transmission);
 				//System.out.println("COSTE" + dist2 + "\n");
 
@@ -800,7 +800,7 @@ public class Estat {
 	public void eraseCost(int x1, int y1, int x2, int y2, Double trans) {
 	//	System.out.println("---------------" + "\n");
 	//	System.out.println("COSTE" + coste + "\n");
-		coste -= Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * (trans);
+		coste -=  Math.pow( (Math.sqrt( Math.pow((x1-x2),2) + Math.pow((y1-y2),2))), 2);
 	
 	//	System.out.println("Transmission added" + trans + "\n");
 	//	System.out.println("Distance added" + Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) + "\n");
@@ -813,7 +813,7 @@ public class Estat {
 	//	System.out.println("++++++++++++++++++++" + "\n");
 		//System.out.println("COSTE" + coste + "\n");
 
-		coste +=  Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) * (trans);
+		coste +=   Math.pow( (Math.sqrt( Math.pow((x1-x2),2) + Math.pow((y1-y2),2))), 2);
 		
 		//System.out.println("Transmission added" + trans + "\n");
 	//	System.out.println("Distance added" + Math.pow(Math.sqrt(((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2))),2) + "\n");
@@ -844,7 +844,7 @@ public class Estat {
 		System.out.println("SOC CONNEX: " + sensorID);
 		*/
 		
-		//if(newConnexID == sensorID || oldConnexID == newConnexID) return false;
+		if(newConnexID == sensorID || oldConnexID == newConnexID) return false;
 		
 		//if(newConnexID > 0 && !(connexSList.get(newConnexID).checkExit(sensorID))) return false;
 		
